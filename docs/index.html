@@ -2,12 +2,14 @@
 <title>PAAF</title>
 
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <style type="text/css">
         @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
 
         body {
             width: 900px;
             margin: auto;
+            margin-bottom: 50px;
         }
 
         hr {
@@ -36,6 +38,7 @@
             margin: 4px;
             border: 1px solid rgb(139, 139, 139);
             padding: 5px;
+            padding-bottom: 40px;
             border-radius: 5px;
             font-family: "Source Sans Pro", sans-serif;
         }
@@ -127,6 +130,12 @@
             width: 25px;
             clear: none
         }
+
+        .button {
+            padding: 5px;
+            font-size: medium;
+            float: right;
+        }
     </style>
 
 
@@ -169,8 +178,1739 @@
             border: 0px;
         }
     </style>
-    <!-- ----------------------------------------------------------------------------------------- -->
+</head>
 
+<body>
+    <form method="post" name="PAAF" id="PAAF" class="paaf">
+        <div id="app">
+            <div style="height:75px">
+                <div class="left header">
+                    <span class="">
+                        Queen’s Family Health Team<br>
+                        Provider Asthma Assessment Form (PAAF)<br>
+                    </span>
+                    <label for="encounterDate" style="font-weight:normal">
+                        Encounter Date
+                    </label>
+                    <input type="text" id="encounterDate" v-model="encounterDate" class="patient-info-input"
+                        placeholder="YYYY/MM/DD">
+
+                </div>
+
+                <div class="right">
+                    <label for="patient-name" oscarDB=first_last_name class="patient-info-label">
+                        Patient Name
+                    </label>
+
+                    <input type="text" id="patientName" onclick="" class="patient-info-input">
+
+                    <label for="last-name" class="patient-info-label">
+                        Date of Birth
+                    </label>
+
+                    <input type="text" name="dob" id="dob" v-model="dob" oscarDB=dobc2 class="patient-info-input"
+                        placeholder="YYYY/MM/DD">
+
+                    <label for="mrn" class="patient-info-label">
+                        Medical Record #
+                    </label>
+                    <input type="text" id="mrn" name="mrn" class="patient-info-input">
+
+                </div>
+                <!-- oscarDB=e$last#mrn -->
+            </div>
+
+
+            <div id="asthma-diagnosis-section" class="section">
+                <div class="accordion" style="margin-bottom:5px">
+                    <span class="left">
+                        Asthma diagnosis
+                    </span>
+                    <span class="text-align-right right"
+                        onclick="toggleSection('asthma-diagnosis-na', 'asthma-diagnosis-content')">
+                        <input type="checkbox" id="asthma-diagnosis-na">
+                        N/A
+                    </span>
+                </div>
+
+                <div id="asthma-diagnosis-content">
+                    <label style="width:15%">
+                        <b>Asthma diagnosis</b>
+                    </label>
+                    <!-- Dummy field to pull previous diagnosis data -->
+                    <input v-show="false" id="pulledDiagnosis" type="textbox" oscarDB=e$last#diagnosis>
+                    <span onclick="toggleDiagnosisFields()">
+                        <label>
+                            <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown"
+                                v-model="diagnosis">
+                            Unknown
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisConfirmed" name="diagnosis" value="confirmed"
+                                v-model="diagnosis">
+                            Confirmed
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisSuspected" name="diagnosis" value="suspected"
+                                v-model="diagnosis">
+                            Suspected
+                        </label>
+                        <label>
+                            <input type="radio" id="diagnosisExcluded" name="diagnosis" value="excluded"
+                                v-model="diagnosis">
+                            Excluded
+                        </label>
+                    </span>
+                    <br>
+                    <hr>
+                    <span id="_dateConfirmedExcluded">
+                        <label style="width:15%"></label>
+                        <label style="width:80%">
+                            Date confirmed/excluded
+                            <input type="textbox" id="" placeholder="YYYY/MM/DD">
+                        </label>
+                    </span>
+                    <span id="_spirometryAttached">
+                        <label style="width:15%"></label>
+
+                        <label style="width:80%">
+                            Spirometry or PEF attached
+                            <input type="checkbox" id="">
+                        </label>
+                    </span>
+
+                    <span id="_ageAsthma">
+                        <label style="width:15%"></label>
+
+                        <label style="width:80%">
+                            Age asthma was confirmed
+                            <input type="textbox" id="ageConfirmed" name="ageConfirmed" placeholder=""
+                                style="width:50px" oscarDB=e$last#ageConfirmed>
+                        </label>
+                    </span>
+                    <span v-show="youngPatient">
+                        <label style="width:15%"></label>
+
+                        <label style="width:80%">
+                            Able to do spirometry
+                            <input type="checkbox" v-model="ableSpirometry">
+                        </label>
+                    </span>
+
+                    <hr />
+
+                    <div id="oldSection" v-if="!youngPatient || (youngPatient && ableSpirometry)">
+                        <label><b>Method used to confirm asthma diagnosis</b></label>
+                        <label><i>(for individuals 6 years and older, and younger individuals able to do
+                                spirometry)</i></label>
+                        <table style="margin:5px; width: 99%;">
+                            <colgroup>
+                                <!-- <col span="1" style="border: 0px"> -->
+                            </colgroup>
+
+                            <tr>
+                                <th style="width:10%"></th>
+                                <th style="width:30%">Pulmonary Function Measurement</th>
+                                <th style="width:25%">Children (6 years+)</th>
+                                <th style="width:30%">Adults</th>
+
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox"></td>
+                                <td colspan="3" style="border-bottom:none"><i>PREFERRED: Spirometry showing reversible
+                                        airway obstruction</i></td>
+
+                            </tr>
+                            <tr>
+                                <td>Reduced FEV&#8321;/FVC <br>
+                                    <b>AND</b> <br>
+                                    Increased FEV&#8321; after a bronchodilator or after course of controller therapy
+                                </td>
+                                <td>
+                                    Less than lower limit of normal*<br>(&#60;0.8-0.9)**<br>
+                                    <b>AND</b> <br>
+                                    ≥ 12%
+                                </td>
+                                <td>
+                                    Less than lower limit of normal*<br>(&#60;0.75-0.8)**<br>
+                                    <b>AND</b> <br>
+                                    ≥ 12% <br><i>(and a minimum &#62; 200 mL)</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox"></td>
+                                <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
+                                        variability</i></td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Increase after a bronchodilator or after a course of controller therapy <br>
+                                    <b>OR</b> <br>
+                                    Diurnal variation
+                                </td>
+                                <td>≥ 20%<br>
+                                    <b>OR</b> <br>
+                                    Not recommended
+                                </td>
+                                <td>
+                                    60 L/min <br>
+                                    (minimum ≥ 20%)
+                                    <b>OR</b> <br>
+                                    &#62;8% based upon twice daily readings;<br>
+                                    &#62;20% based upon multiple daily readings
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><input type="checkbox"></td>
+                                <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    a) Methacholine Challenge<br>
+                                    <b>OR</b> <br>
+                                    b) Exercise Challenge
+                                </td>
+                                <td colspan="2">
+                                    PC&#8322;&#8320; &#60;4mg/mL <br>
+                                    (4-16 mg/mL is borderline; 16 mg/mL is negative)<br>
+                                    <b>OR</b><br>
+                                    ≥10-15% decrease in FEV&#8321; post-exercise
+                                </td>
+                            </tr>
+                        </table>
+                        <label style="width:97%;text-align:right;;"><i style="font-size:8pt">*Based on age, height and
+                                ethnicity. &nbsp; &nbsp;
+                                **Appropriate lower limits of normal ratios for adults and children.
+                            </i></label>
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">
+                                This information was originally published in Can Respir J 2012; 19(2) 127-164
+                            </i></label>
+                    </div>
+                    <div id="youngSection" v-if="youngPatient && !ableSpirometry">
+                        <label><b>Method used to confirm asthma diagnosis</b></label>
+                        <label><i>(for individuals 1-5 years of age NOT able to do spirometry)</i></label>
+                        <table style="margin:5px; width: 99%;">
+                            <colgroup>
+                                <!-- <col span="1" style="border: 0px"> -->
+                            </colgroup>
+
+                            <tr>
+                                <th style="width:5%; border-bottom:none;"><input type="checkbox"></th>
+                                <th style="width:95%" colspan="3">Recurrent asthma like symptoms of exacerbation
+                                </th>
+
+                            </tr>
+                            <tr>
+                                <td rowspan="2" style="border-bottom: none; border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td rowspan="2">
+                                    <b>Documentation of airflow obstruction</b>
+                                </td>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox">
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                    <i>Preferred</i><br>
+                                    Documented wheezing or other signs of airflow obstruction observed by a heath care
+                                    provider
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none;">
+                                    <input type="checkbox">
+
+                                </td>
+                                <td style="text-align: left; border-left: none;">
+                                    <i>Alternative</i><br>
+                                    Convincing paternal report of wheezing or other symptoms
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" style="border-bottom: none; border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td rowspan="3">
+                                    <b>Document of reversibility of airflow obstruction</b>
+                                </td>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox">
+
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                    <i>Preferred</i><br>
+                                    Response to bronchodilator within 30 min confirmed by a health care provider
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none; border-bottom: none;">
+                                    <input type="checkbox">
+
+                                </td>
+                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                    <i>Alternative</i><br>
+                                    Gradual but clear response to anti-inflammatory therapy: after ≥ hours of cortical
+                                    steroids
+                                    (OCS), within 3 months of moderate dose inhaled cortical steroids (ICS), expect
+                                    decreased
+                                    symptoms and exacerbation frequency and severity.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; border-right: none;">
+                                    <div><input type="checkbox"></div>
+
+                                </td>
+                                <td style="text-align: left; border-left: none;">
+                                    <i>Alternative</i><br>
+                                    Response to bronchodilator within 30 min by parental history
+                                </td>
+                            </tr>
+                            <tr style="height:30px">
+                                <td style="border-top: none;">
+                                    <b>AND</b> <br>
+                                </td>
+                                <td colspan="3" style="text-align: left; padding-left:10px;">
+                                    <b>No clinical evidence of an alternative diagnosis</b><br>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">
+                                This information was originally published in CAN Respir J2015;22(3);135-143
+                            </i></label>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Family History -->
+            <div id=" family-history-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Family History of Lung Disease
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="lungDisease"
+                            onclick="toggleSection('lungDisease','lungDiseaseContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="lungDiseaseContent">
+
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Parent</th>
+                            <th style="width:20%">Sibling</th>
+                            <th style="width:20%">Unknown</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyGenericParent" oscarDB=e$last#allergyGenericParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyGenericSibling"
+                                    oscarDB=e$last#allergyGenericSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyGenericUnknown"
+                                    oscarDB=e$last#allergyGenericUnknown>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy drug</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyDrugParent" oscarDB=e$last#allergyDrugParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyDrugSibling" oscarDB=e$last#allergyDrugSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyDrugOther" oscarDB=e$last#allergyDrugOther>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy food</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyFoodParent" oscarDB=e$last#allergyFoodParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyFoodSibling" oscarDB=e$last#allergyFoodSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyFoodUnknown" oscarDB=e$last#allergyFoodUnknown>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergy other</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyOtherParent" oscarDB=e$last#allergyOtherParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyOtherSibling" oscarDB=e$last#allergyOtherSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyOtherUnknown" oscarDB=e$last#allergyOtherUnknown>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Eczema</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEczemaParent" oscarDB=e$last#allergyEczemaParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEczemaSibling" oscarDB=e$last#allergyEczemaSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEczemaUnknown" oscarDB=e$last#allergyEczemaUnknown>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Environmental allergies</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEnvironmentalParent"
+                                    oscarDB=e$last#allergyEnvironmentalParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEnvironmentalSibling"
+                                    oscarDB=e$last#allergyEnvironmentalSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyEnvironmentalUnknown"
+                                    oscarDB=e$last#allergyEnvironmentalUnknown>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Hay fever</b>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyHayfeverParent"
+                                    oscarDB=e$last#allergyHayfeverParent>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyHayfeverSibling"
+                                    oscarDB=e$last#allergyHayfeverSibling>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allergyHayfeverUnknown"
+                                    oscarDB=e$last#allergyHayfeverUnknown>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Smoking -->
+            <div id=" smoking-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Smoking
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="smokingNA" onclick="toggleSection('smokingNA', 'smokingContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="smokingContent">
+                    <label style="width:25%;"><b>Smoking status</b> <i>(Cigarettes)</i></label>
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="nonSmoker" name="smokingStatus" value="nonSmoker">
+                        Non-smoker
+                    </label>
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="exSmoker" name="smokingStatus" value="exSmoker">
+                        Ex-smoker
+                    </label>
+
+                    <label onclick="smokingStatusChange()">
+                        <input type="radio" id="currentSmoker" name="smokingStatus" value="currentSmoker">
+                        Current smoker
+                    </label>
+
+                    <div id="isExSmoker" style="width:100%">
+
+                        <hr style="margin:2px 0px 2px 0px">
+                        <div>
+                            <label style="width:25%;"><b>Quit duration</b></label>
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="nonSmoker">
+                                &#62; 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="exSmoker">
+                                1-6 months
+                            </label>
+
+                            <label>
+                                <input type="radio" id="quitDuration" name="allergy" value="currentSmoker">
+                                &#60; 1 month
+                            </label>
+                        </div>
+                        <div>
+                            <label><i>
+                                    When was the last time you smoked a cigarette, even a
+                                    puff?</i></label>
+                        </div>
+
+                        <hr style="margin:2px 0px 2px 0px">
+                        <div>
+                            <label style="width:25%;"><b>Quit when</b></label>
+                            <label>
+                                <input type="textbox" placeholder="YYYY/MM/DD">
+                            </label>
+                        </div>
+                    </div>
+                    <div id="smoker" style="width:100%">
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Average number of cigarettes smoked</b></label>
+                        <label><input type="textbox" placeholder="#" style="width:30px">/day</label>
+                        <label><input type="textbox" placeholder="#" style="width:30px">/month</label>
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Years smoked</b></label>
+                        <label><input type="textbox" placeholder="#" style="width:50px"></label>
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Pack Years</b></label>
+                        <label><input type="textbox" placeholder="#" style="width:50px"></label>
+
+                    </div>
+
+                    <div id="isCurrentSmoker" style="width:100%">
+                        <hr style="margin:2px 0px 2px 0px">
+                        <label style="width:25%"><b>Smoking cessation addressed</b></label>
+                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
+                        <label v-on:click="showCessationAddressedSection = true"><input type="radio"
+                                id="smokingCessationAddressed" name="smokingCessationAddressed" value="yes">
+                            Yes
+                        </label>
+                        <!-- onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')"> -->
+                        <label v-on:click="showCessationAddressedSection = false"><input type="radio"
+                                id="smokingCessationNotAddressed" name="smokingCessationAddressed" value="no">
+                            No
+                        </label>
+
+                        <div id="cessationAddressedSection" v-show="showCessationAddressedSection"
+                            style="width:400px; display:block; margin-left:119px">
+                            <label style=" width:25%; "><b>Ask</b></label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                No
+                            </label>
+                            <br>
+                            <label style="width:25%"><b>Advise</b></label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                No
+                            </label>
+                            <br>
+                            <label style="width:25%"><b>Arrange</b></label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="beta2">
+                                No
+                            </label>
+                        </div>
+                        <div style="width:100%; display:block">
+                            <hr style="width:100%; margin:2px 0px 2px 0px; display:block">
+                            <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
+                            <label>
+                                <input type="radio" id="quitIntentions" name="allergy" value="nonSmoker">
+                                Within a month
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                Within 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                Beyond 6 months
+                            </label>
+                            <label>
+                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                Not planning to quit
+                            </label>
+                        </div>
+                        <div>
+                            <label><i>(Are you planning to quit smoking?)</i></label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>E-cigarette/vaping</b></label>
+                        <label>
+                            <input type="radio" id="vaping" name="vaping" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" id="vaping" name="vaping" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" id="vaping" name="vaping" value="never">
+                            Never
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>Cannabis use</b></label>
+                        <label>
+                            <input type="radio" id="cannabisUse" name="cannabis" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" id="cannabisUse" name="cannabis" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" id="cannabisUse" name="cannabis" value="never">
+                            Never
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
+                        <label>
+                            <input type="radio" id="" name="cannabis" value="current">
+                            Current
+                        </label>
+                        <label>
+                            <input type="radio" id="" name="cannabis" value="past">
+                            Past
+                        </label>
+                        <label>
+                            <input type="radio" id="" name="cannabis" value="never">
+                            Never
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Severity -->
+            <div id="severity-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Severity
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="asthmaSeverityNA"
+                            onclick="toggleSection('asthmaSeverityNA', 'severityContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="severityContent">
+                    <div onclick="familyPhysicianVisitsChange()">
+                        <label><b>Visit(s) to family physician in the last year for asthma symptoms</b></label>
+                        <label>
+                            <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits"
+                                value="yesFamilyPhysicianVisits">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" id="noFamilyPhysicianVisits" name="physicianVisits"
+                                value="noFamilyPhysicianVisits">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" id="unknownFamilyPhysicianVisits" name="physicianVisits"
+                                value="unknownFamilyPhysicianVisits">
+                            Unknown
+                        </label>
+                    </div>
+                    <div id="yesRoutineCareVisits">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Routine primary care visits</label>
+                        <input type=textbox style="width:50px;" placeholder="#">
+                        <label>Urgent Primary Care Visits</label>
+                        <input type=textbox style="width:50px;" placeholder="#">
+                    </div>
+                    <hr>
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:20%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%">Unknown</th>
+                            <th style="width:20%">last year</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Respirologist</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>General Internist</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Allergist</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Pediatrician</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:20%"></th>
+                            <th style="width:16%">Yes</th>
+                            <th style="width:16%">No</th>
+                            <th style="width:16%">Unknown</th>
+                            <th style="width:16%">Last year</th>
+                            <th style="width:16%">Total # ever</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>ED visits ever for asthma</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="textbox" style="width:30px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Hospitalized ever for asthma</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="textbox" style="width:30px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Near fatal asthma episode</b>
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="checkbox">
+                            </td>
+                            <td>
+                                <input type="textbox" style="width:30px;">
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <label style="width:30%;">
+                        <b>Recent best FEV&#8321; or PEF &#60; 60% predicted</b>
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        No
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Unknown
+                    </label>
+                    <label>
+                    </label>
+                    <br>
+                    <hr>
+
+                    <label style="width:30%;">
+                        <b>ICU admissions in the last year</b>
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        No
+                    </label>
+                    <label>
+                        <input type="radio" name="recentBest">
+                        Unknown
+                    </label>
+                    <label>
+                        <input type="textbox" style="width:105px;" placeholder="#ICU admissions">
+                    </label>
+                    <label>
+                        <input type="textbox" style="width:100px;" placeholder="# intubations">
+                    </label>
+                    <br>
+                </div>
+            </div>
+
+
+            <!-- Occupational -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Occupational history
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="occupationalNA"
+                            onclick="toggleSection('occupationalNA', 'occupationalContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="occupationalContent">
+                    <div>
+                        <label style="width:35%; display:block"><b>Current employment status: check all that
+                                apply.</b></label>
+                        <span>&nbsp;&nbsp;
+                            <label>
+                                <input type="checkbox">
+                                Full-Time
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Part-Time
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Shift work
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Retired
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Modified duties
+                            </label>
+                            <label>
+                                <input type="checkbox">
+                                Off work due to respiratory health
+                            </label>
+                            <br>
+                            <label>&nbsp;&nbsp;
+                                <input type="checkbox" id="other" onclick="toggleSectionInline('other','otherSpecify')">
+                                Other
+                                <input id="otherSpecify" style="display:none; width:300px" type="textbox">
+                            </label>
+                        </span>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%">
+                            <b>Current employment</b>
+                        </label>
+                        <input type="textbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
+                        <label>
+                            <input type="radio" name="workStart">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workStart">
+                            No
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Did your asthma symptoms worsen at at work?</b></label>
+                        <label>
+                            <input type="radio" name="workWorsen">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workWorsen">
+                            No
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Complete WRASQ(L) today?</b></label>
+                        <label>
+                            <input type="radio" name="warsql">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="warsql">
+                            No
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Medications -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Medications
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="medicationNA"
+                            onclick="toggleSection('medicationNA', 'medicationContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="medicationContent">
+                    <div>
+                        <label><i>Medications in Oscar (for reference only)</i></label>
+                    </div>
+
+                    <textarea v-show="false" readonly style="width:98%; margin-left:1%" name="oscarMeds"
+                        oscarDB="druglist_generic"></textarea>
+                    <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds"
+                        oscarDB="current_Rx"></textarea>
+                    <hr>
+                    <!-- <div>
+                        <label><b>Current relevant medications</b></label>
+                    </div> -->
+                    <div>
+                        <label style="width:15%">
+                            <b>Beclomethasone</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:15%">
+                            <b>Budesonide</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:15%">
+                            <b>Ciclesonide</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:15%">
+                            <b>Fluticasoneproionate</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:15%">
+                            <b>Fluticasone furoate</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:15%">
+                            <b>Mometasone furoate</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:30%">
+                            <b>On a second controller for the previous year</b>
+                        </label>
+                        <input type="checkbox">
+                    </div>
+                    <hr>
+                    <table style="margin:5px; width: 99%; text-align: left;">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%">Unknown</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Is patient using inhaled corticosteroids (ICS)?</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="ics">
+                            </td>
+                            <td>
+                                <input type="radio" name="ics">
+                            </td>
+                            <td>
+                                <input type="radio" name="ics">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Beta Blockers </b>
+                            </td>
+                            <td>
+                                <input type="radio" name="betaBlockers">
+                            </td>
+                            <td>
+                                <input type="radio" name="betaBlockers">
+                            </td>
+                            <td>
+                                <input type="radio" name="betaBlockers">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>NSAIDS</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="nsaids">
+                            </td>
+                            <td>
+                                <input type="radio" name="nsaids">
+                            </td>
+                            <td>
+                                <input type="radio" name="nsaids">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Patient has a spacing device</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDevice">
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDevice">
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDevice">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Does at least one prescribed medication allow for a spacing device to be
+                                    used?</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDeviceAllowed">
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDeviceAllowed">
+                            </td>
+                            <td>
+                                <input type="radio" name="spacingDeviceAllowed">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Adherence issues known or suspected</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="adherenceIssues">
+                            </td>
+                            <td>
+                                <input type="radio" name="adherenceIssues">
+                            </td>
+                            <td>
+                                <input type="radio" name="adherenceIssues">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Unfilled prescriptions</b><br>
+                                <i>(In the last 6 months has the patient been prescribed any asthma medication
+                                    he/she
+                                    has
+                                    not obtained.)</i>
+                            </td>
+                            <td>
+                                <input type="radio" name="unfilledPrescriptions">
+                            </td>
+                            <td>
+                                <input type="radio" name="unfilledPrescriptions">
+                            </td>
+                            <td>
+                                <input type="radio" name="unfilledPrescriptions">
+                            </td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <div>
+                        <label><b>Number of inhaled corticosteroid prescriptions
+                                filled in the last year</b></label>
+                        <label>
+                            <input type=textbox style="width:30px;" placeholder="#"></label>
+                        <label><i>(Prescription = one month supply)</i></label>
+
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>SABA use</b></label>
+                        <label>
+                            <select name="saba" id="saba">
+                                <option value="">Unknown</option>
+                                <option value="less-than-1">&#60; 1 canister a month</option>
+                                <option value="1-2">1-2 canister(s) a month</option>
+                                <option value="more-than2">&#62; 2 canisters a month</option>
+                            </select>
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Beta&#8322;-agonist free day(s) in the last 4 weeks?</b></label>
+                        <label>
+                            <input type="radio" name="beta2">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="beta2">
+                            No
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label style="width:35%"><b>Systemic steroid use ever</b></label>
+                        <label>
+                            <input type="radio" name="systemicSteroid">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="systemicSteroid">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" name="systemicSteroid">
+                            Unknown
+                        </label>
+                    </div>
+                    <hr>
+
+                    <div>
+                        <label style="width:35%"><b>If yes, indication for systemic steroid use</b></label>
+                        <label>
+                            <input type="radio" name="steroidIndication">
+                            Asthma
+                        </label>
+                        <label>
+                            <input type="radio" name="steroidIndication">
+                            COPD
+                        </label>
+                        <label>
+                            <input type="radio" name="steroidIndication">
+                            Both
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label><b>Total number of times systemic steroid used within the last
+                                year</b></label>
+                        <label>
+                            <input type="textbox" style="width:30px" placeholder="#">
+                        </label>
+                        <label>
+                            <input type="textbox" placeholder="YYYY//MM/DD">
+                            Date last used
+
+                        </label>
+                    </div>
+                    <hr>
+                    <div>
+                        <label><b>Systemic steroid used for 50% of the previous year</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            No
+                        </label>
+                        <label>
+                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            Unknown
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asthma Control -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma Control
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="controlNA" onclick="toggleSection('controlNA', 'controlContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="controlContent">
+                    <div>
+                        <label><i><b>(Note time interval for capture asthma control data is the last four
+                                    weeks)</b></i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Daytime symptoms*</b></label>
+                        <input type="textbox" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
+                            onchange="calcIsControlled()">
+                        <label>Control=&#60;4</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks with dyspnea, cough, wheeze,
+                                and/or
+                                chest
+                                tightness)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Nighttime symptoms*</b></label>
+                        <input type="textbox" name="nighttimeSymptoms" id="nighttimeSymptoms"
+                            onchange="calcIsControlled()" placeholder="# of Nights/Week">
+                        <label>Control=&#60;1</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of nights/week in the last 4 weeks with dyspnea, cough, wheeze,
+                                and/or
+                                chest tightness)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Physical activity limited*</b></label>
+                        <label>
+                            <input type="radio" id="activityIsLimited" name="activityLimited" value="yes"
+                                onchange="calcIsControlled()">Yes
+                        </label>
+                        <label>
+                            <input type="radio" id="activityNotLimited" name="activityLimited" value="no"
+                                onchange="calcIsControlled()">No
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Due to asthma in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Exacerbations since last visit</b></label>
+                        <label>
+                            <input type="radio" name="exacerbationsSinceLast" value="yes"
+                                onchange="calcIsControlled()">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="exacerbationsSinceLast" id="noExacerbationsSinceLast"
+                                value="no">No
+                        </label>
+                        <label>
+                            <input type="textbox" id="numberExacerbations" name="numberExacerbations"
+                                onchange="calcIsControlled()" placeholder="# of Exacerbations">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <div>
+                        <label style="width:32%"><b>Dates of exacerbations</b></label>
+                        <label>
+                            <input type="textbox" placeholder="YYYY/MM/DD">
+                        </label>
+                        <label>
+                            <input type="textbox" placeholder="YYYY/MM/DD">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label><b>School/work/social activity absences due to asthma*</b></label>
+                        <label>
+                            <input type="radio" name="workSchoolAbsences" value="yes">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="workSchoolAbsences" id="noWorkSchoolAbsences" value="no">No
+                        </label>
+                        <label>
+                            <input type="textbox" name="numberWorkSchoolAbsences" id="numberWorkSchoolAbsences"
+                                placeholder="# of days/week" onchange="calcIsControlled()">
+                        </label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Needs reliever*</b></label>
+                        <label>
+                            <input type="textbox" placeholder="# of doses/week" onchange="calcIsControlled()"
+                                name="needReliever" id="needReliever">
+                        </label>
+                        <label>control=&#60;4</label>
+                    </div>
+                    <div>
+                        <label><i>(Average number of days/week in the last 4 weeks)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Sputum eosinophils</b></label>
+                        <label>
+                            <input type="radio" name="sputumEosinophils">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="sputumEosinophils">No
+                        </label>
+                        &nbsp;&nbsp;&nbsp;
+                        <input type="textbox" placeholder="%" style="width:40px">
+                        <label>control=&#60;2-3%</label>
+                    </div>
+                    <div>
+                        <label><i>(Measured Yes/no: if yes, %)</i></label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>FEV or PEF &#62;= 90% predicted or personal best</b></label>
+                        <label>
+                            <input type="radio" name="FEVPersonalBest">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="FEVPersonalBest">No
+                        </label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label><b>PEF diurnal variation 15% over a 2 week period</b></label>
+                        <label>
+                            <input type="radio" name="PEVDiurnalVariation">Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="PEVDiurnalVariation">No
+                        </label>
+                    </div>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label><b>Number of days missed from school or work due to asthma in last year
+                        </b>
+                        <input type="textbox" style="vertical-align: bottom; width:50px" placeholder="#">
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <label style="width:32%"><b>Asthma controlled</b></label>
+                        <label v-show="false">
+                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                                id="asthmaControlled" value="Yes">Yes
+                        </label>
+                        <label v-show="false">
+                            <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
+                                value="No">No
+                        </label>
+                        <b>{{ asthmaControlled }}</b>
+                    </div>
+                    <div>
+                        <label><i>Based on control criteria from the Canadian Thoracic Society 2012 Asthma
+                                Guidelines and
+                                2017
+                                Position Paper.<br>
+                                Any ONE element NOT in control - OVERALL NOT in control.</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Care and Management / Referrals -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Care and management / referrals
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="careNA" onclick="toggleSection('careNA', 'careContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="careContent">
+                    <table style="margin:5px; width: 99%;">
+                        <tr>
+                            <th style="width:50%"></th>
+                            <th style="width:25%">Yes</th>
+                            <th style="width:25%">No</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Patient technique optimal</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="techniqueOptimal">
+                            </td>
+                            <td>
+                                <input type="radio" name="techniqueOptimal">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Triggers addressed</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="triggersAddressed">
+                            </td>
+                            <td>
+                                <input type="radio" name="triggersAddressed">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Environmental controls reviewed</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="environmentalControlsReviewed">
+                            </td>
+                            <td>
+                                <input type="radio" name="environmentalControlsReviewed">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Barriers addressed</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="barriersAddressed">
+                            </td>
+                            <td>
+                                <input type="radio" name="barriersAddressed">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Referral to asthma education program/CRE</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="referralToEducation">
+                            </td>
+                            <td>
+                                <input type="radio" name="referralToEducation">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Asthma Action Plan -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma action plan
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="actionPlanNA"
+                            onclick="toggleSection('actionPlanNA', 'actionPlanContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="actionPlanContent">
+                    <table style="margin:5px; width: 99%; border: none">
+                        <tr>
+                            <th style="width:40%"></th>
+                            <th style="width:20%">Yes</th>
+                            <th style="width:20%">No</th>
+                            <th style="width:20%"></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Written asthma action plan provided</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="writtenPlanProvided">
+                            </td>
+                            <td>
+                                <input type="radio" name="writtenPlanProvided">
+                            </td>
+                            <td>
+                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Written asthma action plan revised</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="writtenPlanRevised">
+                            </td>
+                            <td>
+                                <input type="radio" name="writtenPlanRevised">
+                            </td>
+                            <td>
+                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Asthma action plan reviewed & not changed</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="reviewedNotChanged">
+                            </td>
+                            <td>
+                                <input type="radio" name="reviewedNotChanged">
+                            </td>
+                            <td>
+                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Yellow or red zone of action plan</b>
+                            </td>
+                            <td>
+                                <input type="radio" name="yellowOrRed">
+                            </td>
+                            <td>
+                                <input type="radio" name="yellowOrRed">
+                            </td>
+                            <td>
+                                <input type="textbox" placeholder="# of times">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <!-- Asthma Control Zone -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Asthma control zone
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="controlZoneNA"
+                            onclick="toggleSection('controlZoneNA', 'controlZoneContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="controlZoneContent">
+                    <label style="text-align:center">
+                        <i>Provider assessment based upon prior Asthma Control parameter responses</i>
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+                    <div>
+                        <!-- <label class="width-15"><b>Quit Duration</b></label> -->
+
+                        <label>
+                            <input type="radio" name="controlZone" value="green">
+                            <b>Green</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="controlZone" value="yellow">
+                            <b>Yellow</b>
+                        </label>
+                        <label>
+                            <input type="radio" name="controlZone" value="red">
+                            <b>Red</b>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <i>If Asthma controlled option is green. If Asthma uncontrolled option is yellow or
+                                red.</i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pulmonary Function Test -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Pulmonary Function Test
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="pulmonaryNA"
+                            onclick="toggleSection('pulmonaryNA', 'pulmonaryContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="pulmonaryContent">
+                    <label style="width:45%"><b>Patient was monitored for spirometry in the last year</b></label>
+                    <label>
+                        <input type="radio" id="spirometryLast12" name="" value="Yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" id="spirometryLast12" name="" value="No">
+                        No
+                    </label>
+
+                    <hr style="margin:2px 0px 2px 0px">
+                    <label style="width:45%"><b>Persistent airflow obstruction</b></label>
+                    <label>
+                        <input type="radio" id="spirometryLast12" name="" value="Yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" id="spirometryLast12" name="" value="No">
+                        No
+                    </label>
+                    <label> <i>
+                            After appropriate bronchodilator withold FEV&#8321; &#60; 80% of personal best OR &#60
+                            LLN;
+                            AND
+                            reduced FEV&#8321;/FVC defined as less than the LLN
+                        </i>
+                    </label>
+
+
+                </div>
+            </div>
+
+            <!-- Assessment Tools -->
+            <div id="-section" class="section">
+                <div class="accordion">
+                    <span>
+                        Assessment Tools
+                    </span>
+                    <span class="text-align-right right">
+                        <input type="checkbox" id="assessmentToolsNA"
+                            onclick="toggleSection('assessmentToolsNA', 'assessmentToolsContent')">
+                        N/A
+                    </span>
+                </div>
+                <div id="assessmentToolsContent">
+                    <label style="width:45%"><b>Quality of Life assessment completed
+                        </b></label>
+                    <label>
+                        <input type="radio" id="" name="qualityAssessmentCompleted" value="Yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" id="" name="qualityAssessmentCompleted" value="No">
+                        No
+                    </label>
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="1" max="7" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Asthma Control Questionnaire score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="0" max="6" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Asthma Control Test score
+                        </b></label>
+                    <input type="number" id="score1" name="score1" min="5" max="25" placeholder="#">
+                    <hr style="margin:2px 0px 2px 0px">
+
+                    <label style="width:45%"><b>Child Asthma Control Test score
+                        </b></label>
+                    <input style="margin-bottom: 5px;" type="number" id="score1" name="score1" min="0" max="27"
+                        placeholder="#">
+                </div>
+            </div>
+            <div>
+                <input value="Save & Close" class="button" name="SubmitButton" id="SubmitButton" type="submit" />
+            </div>
+        </div>
+
+    </form>
     <!-------Script to optimize window on loading----------->
     <script type="text/javascript" language="javascript">
         smokingStatusChange = function () {
@@ -271,1628 +2011,111 @@
             }
         }
 
+        // window.onload = function () {
+        // }
+
+        // document.addEventListener("DOMContentLoaded", () => {
+        // if (document.getElementById('activityIsLimited').checked) {
+        //     var _activityLimited = "yes";
+        // } else {
+        //     var _activityLimited = "no";
+        // }
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showCessationAddressedSection: false,
+                dob: document.getElementById("dob").value,
+                youngPatient: false,
+                ableSpirometry: true,
+                //is controlled indicators
+                // activityLimited: _activityLimited,
+                asthmaControlled: null,
+                encounterDate: document.getElementById("encounterDate").value,
+                diagnosis: document.getElementById("pulledDiagnosis").value
+            },
+            watch: {
+                // whenever question changes, this function will run
+                dob: function (newDob) {
+                    calcAge(newDob)
+                }
+                // ableSpirometry: function (newAbleSpirometry) {
+                //     if (newAbleSpirometry) {
+                //         youngPatient = fals
+                //     }
+                //     calcAge(newDob)
+                // },
+            },
+        });
+
+        // check if new form based on existing encounter date data
+        if (!app.encounterDate) {
+            var d = new Date();
+            app.encounterDate = (d.getFullYear() + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + ("0" + d.getDate()).slice(-2));
+        }
+
+        calcAge = function (_dob) {
+            var dob = new Date(_dob);
+            // console.log(dob.isValid())
+            console.log(dob.getTime())
+            // if (!isNaN(dob.getTime())) {
+            var month_diff = Date.now() - dob.getTime();
+
+            //convert the calculated difference in date format  
+            var age_dt = new Date(month_diff);
+
+            //extract year from date      
+            var year = age_dt.getUTCFullYear();
+
+            //now calculate the age of the user  
+            var age = Math.abs(year - 1970);
+            console.log(age)
+            if (age > 5) {
+                app.youngPatient = false;
+                app.ableSpirometry = true;
+            } else {
+                app.youngPatient = true;
+                app.ableSpirometry = false;
+            }
+
+            // }
+        }
+
+        calcIsControlled = function () {
+            if (document.getElementById('activityIsLimited').checked ||
+                parseInt(document.getElementById('needReliever').value) >= 4 ||
+                parseInt(document.getElementById("daytimeSymptoms").value) >= 4 ||
+                parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
+                parseInt(document.getElementById("nighttimeSymptoms").value) >= 1 ||
+                parseInt(document.getElementById("numberExacerbations").value) >= 1) {
+                app.asthmaControlled = "No";
+            } else if (document.getElementById('activityNotLimited').checked &&
+                parseInt(document.getElementById('needReliever').value) < 4 &&
+                parseInt(document.getElementById("daytimeSymptoms").value) < 4 &&
+                document.getElementById("noWorkSchoolAbsences").checked &&
+                parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
+                document.getElementById("noExacerbationsSinceLast").checked) {
+                app.asthmaControlled = "Yes";
+            } else {
+                app.asthmaControlled = "-";
+            }
+
+        }
+        calcAge(app.dob);
+        calcIsControlled()
+        // });
+
+        // hideShow = function () {
+        //     debugger
+        //     if (app.asdf) {
+        //         app.asdf = false
+        //     } else {
+        //         app.asdf = true
+        //     }
+        // }
+
     </script>
 
-</head>
-
-<body onload="start();">
-    <form method="post" action="" name="PAAF" class="paaf">
-        <div style="height:75px">
-            <div class="left header">
-                <span class="">
-                    Queen’s Family Health Team<br>
-                    Provider Asthma Assessment Form (PAAF)<br>
-                </span>
-                <label for="first-name" style="font-weight:normal">
-                    Encounter Date
-                </label>
-                <input type="text" id="first-name" class="patient-info-input" placeholder="YYYY/MM/DD">
-
-            </div>
-
-            <div class="right">
-                <label for="first-name" class="patient-info-label">
-                    Patient Name
-                </label>
-
-                <input type="text" id="patientName" onclick="" class="patient-info-input">
-
-                <label for="last-name" class="patient-info-label">
-                    Date of Birth
-                </label>
-
-                <input type="text" id="dob" onclick="calcDOB()" class="patient-info-input" placeholder="YYYY/MM/DD">
-
-                <label for="email" class="patient-info-label">
-                    Medical Record #
-                </label>
-
-                <input type="email" id="email" class="patient-info-input">
-            </div>
-            <!-- <input name="BP" id="BP" type="hidden" oscarDB=m$BP#value> -->
-        </div>
-
-
-        <div id="asthma-diagnosis-section" class="section">
-            <div class="accordion" style="margin-bottom:5px">
-                <span class="left">
-                    Asthma diagnosis
-                </span>
-                <span class="text-align-right right"
-                    onclick="toggleSection('asthma-diagnosis-na', 'asthma-diagnosis-content')">
-                    <input type="checkbox" id="asthma-diagnosis-na">
-                    N/A
-                </span>
-            </div>
-
-            <div id="asthma-diagnosis-content">
-                <label style="width:15%">
-                    <b>Asthma diagnosis</b>
-                </label>
-                <span onclick="toggleDiagnosisFields()">
-                    <label>
-                        <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown">
-                        Unknown
-                    </label>
-                    <label>
-                        <input type="radio" id="diagnosisConfirmed" name="diagnosis" value="confirmed">
-                        Confirmed
-                    </label>
-                    <label>
-                        <input type="radio" id="diagnosisSuspected" name="diagnosis" value="suspected">
-                        Suspected
-                    </label>
-                    <label>
-                        <input type="radio" id="diagnosisExcluded" name="diagnosis" value="excluded">
-                        Excluded
-                    </label>
-                </span>
-                <br>
-                <hr>
-                <span id="_dateConfirmedExcluded">
-                    <label style="width:15%"></label>
-                    <label style="width:80%">
-                        Date confirmed/excluded
-                        <input type="textbox" id="" placeholder="YYYY/MM/DD">
-                    </label>
-                </span>
-                <span id="_spirometryAttached">
-                    <label style="width:15%"></label>
-
-                    <label style="width:80%">
-                        <input type="checkbox" id="">
-                        Spirometry or PEF attached**
-                    </label>
-                </span>
-
-                <span id="_ageAsthma">
-                    <label style="width:15%"></label>
-
-                    <label style="width:80%">
-                        Age asthma was confirmed
-                        <input type="textbox" id="" placeholder="#">
-                    </label>
-                </span>
-
-                <hr />
-
-                <div id="oldSection">
-                    <label><b>Method used to confirm asthma diagnosis</b></label>
-                    <label><i>(for individuals 6 years and older, and younger individuals able to do
-                            spirometry)</i></label>
-                    <table style="margin:5px; width: 99%;">
-                        <colgroup>
-                            <!-- <col span="1" style="border: 0px"> -->
-                        </colgroup>
-
-                        <tr>
-                            <th style="width:10%"></th>
-                            <th style="width:30%">Pulmonary Function Measurement</th>
-                            <th style="width:25%">Children (6 years+)</th>
-                            <th style="width:30%">Adults</th>
-
-                        </tr>
-                        <tr>
-                            <td rowspan="2"><input type="checkbox"></td>
-                            <td colspan="3" style="border-bottom:none"><i>PREFERRED: Spirometry showing reversible
-                                    airway obstruction</i></td>
-
-                        </tr>
-                        <tr>
-                            <td>Reduced FEV&#8321;/FVC <br>
-                                <b>AND</b> <br>
-                                Increased FEV&#8321; after a bronchodilator or after course of controller therapy
-                            </td>
-                            <td>
-                                Less than lower limit of normal*<br>(&#60;0.8-0.9)**<br>
-                                <b>AND</b> <br>
-                                ≥ 12%
-                            </td>
-                            <td>
-                                Less than lower limit of normal*<br>(&#60;0.75-0.8)**<br>
-                                <b>AND</b> <br>
-                                ≥ 12% <br><i>(and a minimum &#62; 200 mL)</i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2"><input type="checkbox"></td>
-                            <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
-                                    variability</i></td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                Increase after a bronchodilator or after a course of controller therapy <br>
-                                <b>OR</b> <br>
-                                Diurnal variation
-                            </td>
-                            <td>≥ 20%<br>
-                                <b>OR</b> <br>
-                                Not recommended
-                            </td>
-                            <td>
-                                60 L/min <br>
-                                (minimum ≥ 20%)
-                                <b>OR</b> <br>
-                                &#62;8% based upon twice daily readings;<br>
-                                &#62;20% based upon multiple daily readings
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2"><input type="checkbox"></td>
-                            <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i></td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                a) Methacholine Challenge<br>
-                                <b>OR</b> <br>
-                                b) Exercise Challenge
-                            </td>
-                            <td colspan="2">
-                                PC&#8322;&#8320; &#60;4mg/mL <br>
-                                (4-16 mg/mL is borderline; 16 mg/mL is negative)<br>
-                                <b>OR</b><br>
-                                ≥10-15% decrease in FEV&#8321; post-exercise
-                            </td>
-                        </tr>
-                    </table>
-                    <label style="width:97%;text-align:right;;"><i style="font-size:8pt">*Based on age, height and
-                            ethnicity. &nbsp; &nbsp;
-                            **Appropriate lower limits of normal ratios for adults and children.
-                        </i></label>
-                    <label style="width:97%;text-align:right;"><i style="font-size:8pt">
-                            This information was originally published in Can Respir J 2012; 19(2) 127-164
-                        </i></label>
-                </div>
-                <hr>
-                <div id="youngSection">
-                    <label><b>Method used to confirm asthma diagnosis</b></label>
-                    <label><i>(for individuals 1-5 years of age NOT able to do spirometry)</i></label>
-                    <table style="margin:5px; width: 99%;">
-                        <colgroup>
-                            <!-- <col span="1" style="border: 0px"> -->
-                        </colgroup>
-
-                        <tr>
-                            <th style="width:5%; border-bottom:none;"><input type="checkbox"></th>
-                            <th style="width:95%" colspan="3">Recurrent asthma like symptoms of exacerbation
-                            </th>
-
-                        </tr>
-                        <tr>
-                            <td rowspan="2" style="border-bottom: none; border-top: none;">
-                                <b>AND</b> <br>
-                            </td>
-                            <td rowspan="2">
-                                <b>Documentation of airflow obstruction</b>
-                            </td>
-                            <td style="text-align: left; border-right: none; border-bottom: none;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: left; border-left: none; border-bottom: none;">
-                                <i>Preferred</i><br>
-                                Documented wheezing or other signs of airflow obstruction observed by a heath care
-                                provider
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; border-right: none;">
-                                <input type="checkbox">
-
-                            </td>
-                            <td style="text-align: left; border-left: none;">
-                                <i>Alternative</i><br>
-                                Convincing paternal report of wheezing or other symptoms
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3" style="border-bottom: none; border-top: none;">
-                                <b>AND</b> <br>
-                            </td>
-                            <td rowspan="3">
-                                <b>Document of reversibility of airflow obstruction</b>
-                            </td>
-                            <td style="text-align: left; border-right: none; border-bottom: none;">
-                                <input type="checkbox">
-
-                            </td>
-                            <td style="text-align: left; border-left: none; border-bottom: none;">
-                                <i>Preferred</i><br>
-                                Response to bronchodilator within 30 min confirmed by a health care provider
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; border-right: none; border-bottom: none;">
-                                <input type="checkbox">
-
-                            </td>
-                            <td style="text-align: left; border-left: none; border-bottom: none;">
-                                <i>Alternative</i><br>
-                                Gradual but clear response to anti-inflammatory therapy: after ≥ hours of cortical
-                                steroids
-                                (OCS), within 3 months of moderate dose inhaled cortical steroids (ICS), expect
-                                decreased
-                                symptoms and exacerbation frequency and severity.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; border-right: none;">
-                                <div><input type="checkbox"></div>
-
-                            </td>
-                            <td style="text-align: left; border-left: none;">
-                                <i>Alternative</i><br>
-                                Response to bronchodilator within 30 min by parental history
-                            </td>
-                        </tr>
-                        <tr style="height:30px">
-                            <td style="border-top: none;">
-                                <b>AND</b> <br>
-                            </td>
-                            <td colspan="3" style="text-align: left; padding-left:10px;">
-                                <b>No clinical evidence of an alternative diagnosis</b><br>
-                            </td>
-                        </tr>
-
-                    </table>
-                    <label style="width:97%;text-align:right;"><i style="font-size:8pt">
-                            This information was originally published in CAN Respir J2015;22(3);135-143
-                        </i></label>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <!-- Family History -->
-        <div id=" family-history-section" class="section">
-            <div class="accordion">
-                <span>
-                    Family History of Lung Disease
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="lungDisease" onclick="toggleSection('lungDisease','lungDiseaseContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="lungDiseaseContent">
-
-                <table style="margin:5px; width: 99%;">
-                    <tr>
-                        <th style="width:40%"></th>
-                        <th style="width:20%">Parent</th>
-                        <th style="width:20%">Sibling</th>
-                        <th style="width:20%">Unknown</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Allergy</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Allergy drug</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Allergy food</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Allergy other</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Eczema</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Environmental allergies</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Hayfever</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- Smoking -->
-        <div id="smoking-section" class="section">
-            <div class="accordion">
-                <span>
-                    Smoking
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="smokingNA" onclick="toggleSection('smokingNA', 'smokingContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="smokingContent">
-                <label style="width:25%;"><b>Smoking status</b> <i>(Cigarettes)</i></label>
-                <label onclick="smokingStatusChange()">
-                    <input type="radio" id="nonSmoker" name="smokingStatus" value="nonSmoker">
-                    Non-smoker
-                </label>
-                <label onclick="smokingStatusChange()">
-                    <input type="radio" id="exSmoker" name="smokingStatus" value="exSmoker">
-                    Ex-smoker
-                </label>
-
-                <label onclick="smokingStatusChange()">
-                    <input type="radio" id="currentSmoker" name="smokingStatus" value="currentSmoker">
-                    Current smoker
-                </label>
-
-                <div id="isExSmoker" style="width:100%">
-
-                    <hr style="margin:2px 0px 2px 0px">
-                    <div>
-                        <label style="width:25%;"><b>Quit duration</b></label>
-                        <label>
-                            <input type="radio" id="quitDuration" name="allergy" value="nonSmoker">
-                            &#62; 6 months
-                        </label>
-                        <label>
-                            <input type="radio" id="quitDuration" name="allergy" value="exSmoker">
-                            1-6 months
-                        </label>
-
-                        <label>
-                            <input type="radio" id="quitDuration" name="allergy" value="currentSmoker">
-                            &#60; 1 month
-                        </label>
-                    </div>
-                    <div>
-                        <label><i>
-                                When was the last time you smoked a cigarette, even a puff?</i></label>
-                    </div>
-
-                    <hr style="margin:2px 0px 2px 0px">
-                    <div>
-                        <label style="width:25%;"><b>Quit when</b></label>
-                        <label>
-                            <input type="textbox" placeholder="YYYY/MM/DD">
-                        </label>
-                    </div>
-                </div>
-                <div id="smoker" style="width:100%">
-                    <hr style="margin:2px 0px 2px 0px">
-                    <label style="width:25%"><b>Average number of cigarettes smoked</b></label>
-                    <label><input type="textbox" placeholder="#" style="width:30px">/day</label>
-                    <label><input type="textbox" placeholder="#" style="width:30px">/month</label>
-                    <hr style="margin:2px 0px 2px 0px">
-                    <label style="width:25%"><b>Years smoked</b></label>
-                    <label><input type="textbox" placeholder="#" style="width:50px"></label>
-                    <hr style="margin:2px 0px 2px 0px">
-                    <label style="width:25%"><b>Pack Years</b></label>
-                    <label><input type="textbox" placeholder="#" style="width:50px"></label>
-
-                </div>
-
-                <div id="isCurrentSmoker" style="width:100%">
-                    <hr style="margin:2px 0px 2px 0px">
-                    <div style="width:400px; float:left;">
-                        <label style="width:49%"><b>Smoking cessation addressed</b></label>
-                        <label
-                            onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')">
-                            <input type="radio" id="smokingCessationAddressed" name="smokingCessationAddressed"
-                                value="yes">
-                            Yes
-                        </label>
-                        <label
-                            onclick="toggleSectionFloat('smokingCessationNotAddressed', 'cessationAddressedSection')">
-                            <input type="radio" id="smokingCessationNotAddressed" name="smokingCessationAddressed"
-                                value="no">
-                            No
-                        </label>
-                    </div>
-
-                    <div id="cessationAddressedSection" style="width:400px; float:left">
-                        <label style=" width:25%; "><b>Ask</b></label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            No
-                        </label>
-                        <br>
-                        <label style="width:25%"><b>Advise</b></label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            No
-                        </label>
-                        <br>
-                        <label style="width:25%"><b>Arrange</b></label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="beta2">
-                            No
-                        </label>
-                    </div>
-                    <div>
-                        <hr style="width:100%; margin:2px 0px 2px 0px">
-                        <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
-                        <label>
-                            <input type="radio" id="quitIntentions" name="allergy" value="nonSmoker">
-                            Within a month
-                        </label>
-                        <label>
-                            <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
-                            Within 6 months
-                        </label>
-                        <label>
-                            <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
-                            Beyond 6 months
-                        </label>
-                        <label>
-                            <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
-                            Not planning to quit
-                        </label>
-                    </div>
-                    <div>
-                        <label><i>(Are you planning to quit smoking?)</i></label>
-                    </div>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:25%;"><b>E-cigarette/vaping</b></label>
-                    <label>
-                        <input type="radio" id="vaping" name="vaping" value="current">
-                        Current
-                    </label>
-                    <label>
-                        <input type="radio" id="vaping" name="vaping" value="past">
-                        Past
-                    </label>
-                    <label>
-                        <input type="radio" id="vaping" name="vaping" value="never">
-                        Never
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:25%;"><b>Cannabis use</b></label>
-                    <label>
-                        <input type="radio" id="cannabisUse" name="cannabis" value="current">
-                        Current
-                    </label>
-                    <label>
-                        <input type="radio" id="cannabisUse" name="cannabis" value="past">
-                        Past
-                    </label>
-                    <label>
-                        <input type="radio" id="cannabisUse" name="cannabis" value="never">
-                        Never
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
-                    <label>
-                        <input type="radio" id="" name="cannabis" value="current">
-                        Current
-                    </label>
-                    <label>
-                        <input type="radio" id="" name="cannabis" value="past">
-                        Past
-                    </label>
-                    <label>
-                        <input type="radio" id="" name="cannabis" value="never">
-                        Never
-                    </label>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Severity -->
-        <div id="severity-section" class="section">
-            <div class="accordion">
-                <span>
-                    Asthma Severity
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="asthmaSeverityNA"
-                        onclick="toggleSection('asthmaSeverityNA', 'severityContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="severityContent">
-                <div onclick="familyPhysicianVisitsChange()">
-                    <label><b>Visit(s) to family physician in the last year for asthma symptoms</b></label>
-                    <label>
-                        <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits"
-                            value="yesFamilyPhysicianVisits">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" id="noFamilyPhysicianVisits" name="physicianVisits"
-                            value="noFamilyPhysicianVisits">
-                        No
-                    </label>
-                    <label>
-                        <input type="radio" id="unknownFamilyPhysicianVisits" name="physicianVisits"
-                            value="unknownFamilyPhysicianVisits">
-                        Unknown
-                    </label>
-                </div>
-                <div id="yesRoutineCareVisits">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Routine primary care visits</label>
-                    <input type=textbox style="width:50px;" placeholder="#">
-                    <label>Urgent Primary Care Visits</label>
-                    <input type=textbox style="width:50px;" placeholder="#">
-                </div>
-                <hr>
-                <table style="margin:5px; width: 99%;">
-                    <tr>
-                        <th style="width:20%"></th>
-                        <th style="width:20%">Yes</th>
-                        <th style="width:20%">No</th>
-                        <th style="width:20%">Unknown</th>
-                        <th style="width:20%">last year</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Respirologist</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>General Internist</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Allergist</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Pediatrician</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                    </tr>
-                </table>
-                <hr>
-                <table style="margin:5px; width: 99%;">
-                    <tr>
-                        <th style="width:20%"></th>
-                        <th style="width:16%">Yes</th>
-                        <th style="width:16%">No</th>
-                        <th style="width:16%">Unknown</th>
-                        <th style="width:16%">Last year</th>
-                        <th style="width:16%">Total # ever</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>ED visits ever for asthma</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="textbox" style="width:30px;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Hospitalized ever for asthma</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="textbox" style="width:30px;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Near fatal asthma episode</b>
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>
-                            <input type="textbox" style="width:30px;">
-                        </td>
-                    </tr>
-                </table>
-                <hr>
-                <label style="width:30%;">
-                    <b>Recent best FEV&#8321; or PEF &#60; 60% predicted</b>
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    No
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    Unknown
-                </label>
-                <label>
-                </label>
-                <br>
-                <hr>
-
-                <label style="width:30%;">
-                    <b>ICU admissions in the last year</b>
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    No
-                </label>
-                <label>
-                    <input type="radio" name="recentBest">
-                    Unknown
-                </label>
-                <label>
-                    <input type="textbox" style="width:105px;" placeholder="#ICU admissions">
-                </label>
-                <label>
-                    <input type="textbox" style="width:100px;" placeholder="# intubations">
-                </label>
-                <br>
-            </div>
-        </div>
-
-
-        <!-- Occupational -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Occupational history
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="occupationalNA"
-                        onclick="toggleSection('occupationalNA', 'occupationalContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="occupationalContent">
-                <div>
-                    <label style="width:35%; display:block"><b>Current employment status: check all that
-                            apply.</b></label>
-                    <span>&nbsp;&nbsp;
-                        <label>
-                            <input type="checkbox">
-                            Full-Time
-                        </label>
-                        <label>
-                            <input type="checkbox">
-                            Part-Time
-                        </label>
-                        <label>
-                            <input type="checkbox">
-                            Shift work
-                        </label>
-                        <label>
-                            <input type="checkbox">
-                            Retired
-                        </label>
-                        <label>
-                            <input type="checkbox">
-                            Modified duties
-                        </label>
-                        <label>
-                            <input type="checkbox">
-                            Off work due to respiratory health
-                        </label>
-                        <br>
-                        <label>&nbsp;&nbsp;
-                            <input type="checkbox" id="other" onclick="toggleSectionInline('other','otherSpecify')">
-                            Other
-                            <input id="otherSpecify" style="display:none; width:300px" type="textbox">
-                        </label>
-                    </span>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%">
-                        <b>Current employment</b>
-                    </label>
-                    <input type="textbox">
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
-                    <label>
-                        <input type="radio" name="workStart">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="workStart">
-                        No
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>Did your asthma symptoms worsen at at work?</b></label>
-                    <label>
-                        <input type="radio" name="workWorsen">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="workWorsen">
-                        No
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>Complete WRASQ(L) today?</b></label>
-                    <label>
-                        <input type="radio" name="warsql">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="warsql">
-                        No
-                    </label>
-
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Medications -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Medications
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="medicationNA"
-                        onclick="toggleSection('medicationNA', 'medicationContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="medicationContent">
-                <div>
-                    <label>Medications prescribed at this visit**</label>
-                </div>
-                <hr>
-                <div>
-                    <label>Current Medications**</label>
-                </div>
-                <hr>
-                <table style="margin:5px; width: 99%; text-align: left;">
-                    <tr>
-                        <th style="width:40%"></th>
-                        <th style="width:20%">Yes</th>
-                        <th style="width:20%">No</th>
-                        <th style="width:20%">Unknown</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Is patient using inhaled corticosteroids (ICS)?</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="ics">
-                        </td>
-                        <td>
-                            <input type="radio" name="ics">
-                        </td>
-                        <td>
-                            <input type="radio" name="ics">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Beta Blockers </b>
-                        </td>
-                        <td>
-                            <input type="radio" name="betaBlockers">
-                        </td>
-                        <td>
-                            <input type="radio" name="betaBlockers">
-                        </td>
-                        <td>
-                            <input type="radio" name="betaBlockers">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>NSAIDS</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="nsaids">
-                        </td>
-                        <td>
-                            <input type="radio" name="nsaids">
-                        </td>
-                        <td>
-                            <input type="radio" name="nsaids">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Patient has a spacing device</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDevice">
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDevice">
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDevice">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Does at least one prescribed medication allow for a spacing device to be used?</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDeviceAllowed">
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDeviceAllowed">
-                        </td>
-                        <td>
-                            <input type="radio" name="spacingDeviceAllowed">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Adherence issues known or suspected</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="adherenceIssues">
-                        </td>
-                        <td>
-                            <input type="radio" name="adherenceIssues">
-                        </td>
-                        <td>
-                            <input type="radio" name="adherenceIssues">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Unfilled prescriptions</b><br>
-                            <i>(In the last 6 months has the patient been prescribed any asthma medication he/she
-                                has
-                                not obtained.)</i>
-                        </td>
-                        <td>
-                            <input type="radio" name="unfilledPrescriptions">
-                        </td>
-                        <td>
-                            <input type="radio" name="unfilledPrescriptions">
-                        </td>
-                        <td>
-                            <input type="radio" name="unfilledPrescriptions">
-                        </td>
-                    </tr>
-                </table>
-                <hr>
-                <div>
-                    <label><b>Number of inhaled corticosteroid prescriptions
-                            filled in the last year</b></label>
-                    <label>
-                        <input type=textbox style="width:30px;" placeholder="#"></label>
-                    <label><i>(Prescription = one month supply)</i></label>
-
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>SABA use</b></label>
-                    <label>
-                        <select name="saba" id="saba">
-                            <option value="">Unknown</option>
-                            <option value="less-than-1">&#60; 1 canister a month</option>
-                            <option value="1-2">1-2 canister(s) a month</option>
-                            <option value="more-than2">&#62; 2 canisters a month</option>
-                        </select>
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>Beta&#8322;-agonist free day(s) in the last 4 weeks?</b></label>
-                    <label>
-                        <input type="radio" name="beta2">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="beta2">
-                        No
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label style="width:35%"><b>Systemic steroid use ever</b></label>
-                    <label>
-                        <input type="radio" name="systemicSteroid">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="systemicSteroid">
-                        No
-                    </label>
-                    <label>
-                        <input type="radio" name="systemicSteroid">
-                        Unknown
-                    </label>
-                </div>
-                <hr>
-
-                <div>
-                    <label style="width:35%"><b>If yes, indication for systemic steroid use</b></label>
-                    <label>
-                        <input type="radio" name="steroidIndication">
-                        Asthma
-                    </label>
-                    <label>
-                        <input type="radio" name="steroidIndication">
-                        COPD
-                    </label>
-                    <label>
-                        <input type="radio" name="steroidIndication">
-                        Both
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label><b>Total number of times systemic steroid used within the last
-                            year</b></label>
-                    <label>
-                        <input type="textbox" style="width:30px" placeholder="#">
-                    </label>
-                    <label>
-                        <input type="textbox" placeholder="YYYY//MM/DD">
-                        Date last used
-
-                    </label>
-                </div>
-                <hr>
-                <div>
-                    <label><b>Systemic steroid used for 50% of the previous year</b>
-                    </label>
-                    <label>
-                        <input type="radio" name="corticosteroidUsedPreviousYear">
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="corticosteroidUsedPreviousYear">
-                        No
-                    </label>
-                    <label>
-                        <input type="radio" name="corticosteroidUsedPreviousYear">
-                        Unknown
-                    </label>
-                </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- Asthma Control -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Asthma Control
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="controlNA" onclick="toggleSection('controlNA', 'controlContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="controlContent">
-                <div>
-                    <label><i><b>(Note time interval for capture asthma control data is the last four
-                                weeks)</b></i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Daytime symptoms</b></label>
-                    <input type="textbox" placeholder="# of days/week">
-                    <label>Control=&#60;4</label>
-                </div>
-                <div>
-                    <label><i>(Average number of days/week in the last 4 weeks with dyspnea, cough, wheeze, and/or chest
-                            tightness)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Nighttime symptoms</b></label>
-                    <input type="textbox" placeholder="# of Nights/Week">
-                    <label>Control=&#60;1</label>
-                </div>
-                <div>
-                    <label><i>(Average number of nights/week in the last 4 weeks with dyspnea, cough, wheeze, and/or
-                            chest tightness)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Physical activity limited</b></label>
-                    <label>
-                        <input type="radio" name="activityLimited">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="activityLimited">No
-                    </label>
-                </div>
-                <div>
-                    <label><i>(Due to asthma in the last 4 weeks)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Exacerbations since last visit</b></label>
-                    <label>
-                        <input type="radio" name="exacerbationsSinceLast">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="exacerbationsSinceLast">No
-                    </label>
-                    <label>
-                        <input type="textbox" placeholder="# of Exacerbations">
-                    </label>
-                </div>
-                <div>
-                    <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-
-                <div>
-                    <label style="width:32%"><b>Dates of exacerbations</b></label>
-                    <label>
-                        <input type="textbox" placeholder="YYYY/MM/DD">
-                    </label>
-                    <label>
-                        <input type="textbox" placeholder="YYYY/MM/DD">
-                    </label>
-                </div>
-                <div>
-                    <label><i>(Hospital admission, ED visit, Walk-in-Clinic)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label><b>School/work/social activity absences due to asthma</b></label>
-                    <label>
-                        <input type="radio" name="workShoolAbsences">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="workShoolAbsences">No
-                    </label>
-                    <label>
-                        <input type="textbox" placeholder="# of days/week">
-                    </label>
-                </div>
-                <div>
-                    <label><i>(Average number of days/week in the last 4 weeks)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Needs reliever</b></label>
-                    <label>
-                        <input type="textbox" placeholder="# of doses/week">
-                    </label>
-                    <label>control=&#60;4</label>
-                </div>
-                <div>
-                    <label><i>(Average number of days/week in the last 4 weeks)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Sputum eosinophils</b></label>
-                    <label>
-                        <input type="radio" name="workShoolAbsences">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="workShoolAbsences">No
-                    </label>
-                    &nbsp;&nbsp;&nbsp;
-                    <input type="textbox" placeholder="%" style="width:40px">
-                    <label>control=&#60;2-3%</label>
-                </div>
-                <div>
-                    <label><i>(Measured Yes/no: if yes, %)</i></label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>FEV or PEF &#62;= 90% predicted or personal best</b></label>
-                    <label>
-                        <input type="radio" name="FEVPersonalBest">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="FEVPersonalBest">No
-                    </label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label><b>PEF diurnal variation 15% over a 2 week period</b></label>
-                    <label>
-                        <input type="radio" name="PEVDiurnalVariation">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="PEVDiurnalVariation">No
-                    </label>
-                </div>
-                <hr style="margin:2px 0px 2px 0px">
-                <label><b>Number of days missed from school or work due to asthma in last year
-                    </b>
-                    <input type="textbox" style="vertical-align: bottom; width:50px" placeholder="#">
-                </label>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <label style="width:32%"><b>Asthma controlled</b></label>
-                    <label>
-                        <input type="radio" name="asthmaControlled">Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="asthmaControlled">No
-                    </label>
-                </div>
-                <div>
-                    <label>Based on control criteria from the Canadian Thoracic Society 2012 Asthma Guidelines and 2017
-                        Position Paper.<br>
-                        Any ONE element NOT in control - OVERALL NOT in control.
-                    </label>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Care and Management / Referrals -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Care and management / referrals
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="careNA" onclick="toggleSection('careNA', 'careContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="careContent">
-                <table style="margin:5px; width: 99%;">
-                    <tr>
-                        <th style="width:50%"></th>
-                        <th style="width:25%">Yes</th>
-                        <th style="width:25%">No</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Patient technique optimal</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="techniqueOptimal">
-                        </td>
-                        <td>
-                            <input type="radio" name="techniqueOptimal">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Triggers addressed</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="triggersAddressed">
-                        </td>
-                        <td>
-                            <input type="radio" name="triggersAddressed">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Environmental controls reviewed</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="environmentalControlsReviewed">
-                        </td>
-                        <td>
-                            <input type="radio" name="environmentalControlsReviewed">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Barriers addressed</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="barriersAddressed">
-                        </td>
-                        <td>
-                            <input type="radio" name="barriersAddressed">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Referral to asthma education program/CRE</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="referralToEducation">
-                        </td>
-                        <td>
-                            <input type="radio" name="referralToEducation">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-
-        <!-- Asthma Action Plan -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Asthma action plan
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="actionPlanNA"
-                        onclick="toggleSection('actionPlanNA', 'actionPlanContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="actionPlanContent">
-                <table style="margin:5px; width: 99%; border: none">
-                    <tr>
-                        <th style="width:40%"></th>
-                        <th style="width:20%">Yes</th>
-                        <th style="width:20%">No</th>
-                        <th style="width:20%"></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Written asthma action plan provided</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="writtenPlanProvided">
-                        </td>
-                        <td>
-                            <input type="radio" name="writtenPlanProvided">
-                        </td>
-                        <td>
-                            <input type="textbox" placeholder="DD/MM/YYYY">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Written asthma action plan revised</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="writtenPlanRevised">
-                        </td>
-                        <td>
-                            <input type="radio" name="writtenPlanRevised">
-                        </td>
-                        <td>
-                            <input type="textbox" placeholder="DD/MM/YYYY">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Asthma action plan reviewed & not changed</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="reviewedNotChanged">
-                        </td>
-                        <td>
-                            <input type="radio" name="reviewedNotChanged">
-                        </td>
-                        <td>
-                            <input type="textbox" placeholder="DD/MM/YYYY">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Yellow or red zone of action plan</b>
-                        </td>
-                        <td>
-                            <input type="radio" name="yellowOrRed">
-                        </td>
-                        <td>
-                            <input type="radio" name="yellowOrRed">
-                        </td>
-                        <td>
-                            <input type="textbox" placeholder="# of times">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-        <!-- Asthma Control Zone -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Asthma control zone
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="controlZoneNA"
-                        onclick="toggleSection('controlZoneNA', 'controlZoneContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="controlZoneContent">
-                <label style="text-align:center">
-                    <i>Provider assessment based upon prior Asthma Control parameter responses</i>
-                </label>
-                <hr style="margin:2px 0px 2px 0px">
-                <div>
-                    <!-- <label class="width-15"><b>Quit Duration</b></label> -->
-
-                    <label>
-                        *display parameter response here*
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <i>If Asthma controlled option is green. If Asthma uncontrolled option is yellow or red.</i>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pulmonary Function Test -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Pulmonary Function Test
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="pulmonaryNA" onclick="toggleSection('pulmonaryNA', 'pulmonaryContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="pulmonaryContent">
-                <label style="width:45%"><b>Patient was monitored for spirometry in the last year</b></label>
-                <label>
-                    <input type="radio" id="spirometryLast12" name="" value="Yes">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" id="spirometryLast12" name="" value="No">
-                    No
-                </label>
-
-                <hr style="margin:2px 0px 2px 0px">
-                <label style="width:45%"><b>Persistent airflow obstruction</b></label>
-                <label>
-                    <input type="radio" id="spirometryLast12" name="" value="Yes">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" id="spirometryLast12" name="" value="No">
-                    No
-                </label>
-                <label> <i>
-                        After appropriate bronchodilator withold FEV&#8321; &#60; 80% of personal best OR &#60 LLN; AND
-                        reduced FEV&#8321;/FVC defined as less than the LLN
-                    </i>
-                </label>
-
-
-            </div>
-        </div>
-
-        <!-- Assessment Tools -->
-        <div id="-section" class="section">
-            <div class="accordion">
-                <span>
-                    Assessment Tools
-                </span>
-                <span class="text-align-right right">
-                    <input type="checkbox" id="assessmentToolsNA"
-                        onclick="toggleSection('assessmentToolsNA', 'assessmentToolsContent')">
-                    N/A
-                </span>
-            </div>
-            <div id="assessmentToolsContent">
-                <label style="width:45%"><b>Quality of Life assessment completed
-                    </b></label>
-                <label>
-                    <input type="radio" id="" name="qualityAssessmentCompleted" value="Yes">
-                    Yes
-                </label>
-                <label>
-                    <input type="radio" id="" name="qualityAssessmentCompleted" value="No">
-                    No
-                </label>
-                <hr style="margin:2px 0px 2px 0px">
-
-                <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
-                    </b></label>
-                <input type="number" id="score1" name="score1" min="1" max="7" placeholder="#">
-                <hr style="margin:2px 0px 2px 0px">
-
-                <label style="width:45%"><b>Asthma Control Questionnaire score
-                    </b></label>
-                <input type="number" id="score1" name="score1" min="0" max="6" placeholder="#">
-                <hr style="margin:2px 0px 2px 0px">
-
-                <label style="width:45%"><b>Asthma Control Test score
-                    </b></label>
-                <input type="number" id="score1" name="score1" min="5" max="25" placeholder="#">
-                <hr style="margin:2px 0px 2px 0px">
-
-                <label style="width:45%"><b>Child Asthma Control Test score
-                    </b></label>
-                <input type="number" id="score1" name="score1" min="0" max="27" placeholder="#">
-            </div>
-        </div>
-
-
-    </form>
 
 </body>
 
