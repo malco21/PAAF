@@ -67,6 +67,11 @@
             width: 40%;
         }
 
+        .patient-info-input {
+            display: inline-block;
+            width: 50%;
+        }
+
         table,
         th,
         td {
@@ -78,10 +83,8 @@
             font-size: 13px;
         }
 
-
-        .patient-info-input {
-            display: inline-block;
-            width: 50%;
+        label[for] {
+            cursor: pointer;
         }
 
         .text-align-right {
@@ -124,11 +127,27 @@
             cursor: pointer;
         }
 
-        radio {
+        /* radio {
             display: inline-block;
             float: left;
             width: 25px;
             clear: none
+        } */
+
+        td label {
+            display: block;
+            text-align: center;
+            cursor: pointer
+        }
+
+        .cursor {
+            cursor: pointer;
+        }
+
+        tr label {
+            display: block;
+            text-align: center;
+            cursor: pointer
         }
 
         .button {
@@ -198,13 +217,13 @@
                 </div>
 
                 <div class="right">
-                    <label for="patient-name" oscarDB=first_last_name class="patient-info-label">
+                    <label for="patient-name" class="patient-info-label">
                         Patient Name
                     </label>
 
-                    <input type="text" id="patientName" onclick="" class="patient-info-input">
+                    <input type="text" id="patientName" oscarDB=first_last_name class="patient-info-input">
 
-                    <label for="last-name" class="patient-info-label">
+                    <label class="patient-info-label">
                         Date of Birth
                     </label>
 
@@ -224,11 +243,11 @@
             <div id="asthma-diagnosis-section" class="section">
                 <div class="accordion" style="margin-bottom:5px">
                     <span class="left">
-                        Asthma diagnosis
+                        Asthma Diagnosis
                     </span>
                     <span class="text-align-right right"
                         onclick="toggleSection('asthma-diagnosis-na', 'asthma-diagnosis-content')">
-                        <input type="checkbox" id="asthma-diagnosis-na">
+                        <input type="checkbox" id="asthma-diagnosis-na" name="diagnosisSectionNA">
                         N/A
                     </span>
                 </div>
@@ -238,7 +257,7 @@
                         <b>Asthma diagnosis</b>
                     </label>
                     <!-- Dummy field to pull previous diagnosis data -->
-                    <input v-show="false" id="pulledDiagnosis" type="textbox" oscarDB=e$last#diagnosis>
+                    <input id="pulledDiagnosis" type="hidden" oscarDB=e$last#diagnosis>
                     <span onclick="toggleDiagnosisFields()">
                         <label>
                             <input type="radio" id="diagnosisUnknown" name="diagnosis" value="unknown"
@@ -267,25 +286,17 @@
                         <label style="width:15%"></label>
                         <label style="width:80%">
                             Date confirmed/excluded
-                            <input type="textbox" id="" placeholder="YYYY/MM/DD">
+                            <input type="textbox" name="dateConfirmedExcluded" oscarDB=e$last#dateConfirmedExcluded
+                                placeholder="YYYY/MM/DD">
                         </label>
                     </span>
-                    <span id="_spirometryAttached">
-                        <label style="width:15%"></label>
-
-                        <label style="width:80%">
-                            Spirometry or PEF attached
-                            <input type="checkbox" id="">
-                        </label>
-                    </span>
-
                     <span id="_ageAsthma">
                         <label style="width:15%"></label>
 
                         <label style="width:80%">
                             Age asthma was confirmed
-                            <input type="textbox" id="ageConfirmed" name="ageConfirmed" placeholder=""
-                                style="width:50px" oscarDB=e$last#ageConfirmed>
+                            <input type="textbox" id="ageConfirmed" name="ageConfirmed" style="width:50px"
+                                oscarDB=e$last#ageConfirmed>
                         </label>
                     </span>
                     <span v-show="youngPatient">
@@ -293,7 +304,7 @@
 
                         <label style="width:80%">
                             Able to do spirometry
-                            <input type="checkbox" v-model="ableSpirometry">
+                            <input type="checkbox" name="spirometryAble" oscarDB=e$last#spirometryAble>
                         </label>
                     </span>
 
@@ -316,10 +327,13 @@
 
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox"></td>
-                                <td colspan="3" style="border-bottom:none"><i>PREFERRED: Spirometry showing reversible
-                                        airway obstruction</i></td>
-
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption1"
+                                        oscarDB=e$last#methodChartOlderOption1>
+                                </td>
+                                <td colspan="3" style="border-bottom:none">
+                                    <i>PREFERRED: Spirometry showing reversible
+                                        airway obstruction</i>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Reduced FEV&#8321;/FVC <br>
@@ -338,7 +352,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox"></td>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption2"
+                                        oscarDB=e$last#methodChartOlderOption2></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Peak expiratory flow (PEF)
                                         variability</i></td>
 
@@ -362,7 +377,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><input type="checkbox"></td>
+                                <td rowspan="2"><input type="checkbox" name="methodChartOlderOption3"
+                                        oscarDB=e$last#methodChartOlderOption3></td>
                                 <td colspan="3" style="border-bottom:none"><i>ALTERNATIVE: Positive challenge test</i>
                                 </td>
 
@@ -381,7 +397,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <label style="width:97%;text-align:right;;"><i style="font-size:8pt">*Based on age, height and
+                        <label style="width:97%;text-align:right;"><i style="font-size:8pt">*Based on age, height and
                                 ethnicity. &nbsp; &nbsp;
                                 **Appropriate lower limits of normal ratios for adults and children.
                             </i></label>
@@ -398,7 +414,8 @@
                             </colgroup>
 
                             <tr>
-                                <th style="width:5%; border-bottom:none;"><input type="checkbox"></th>
+                                <th style="width:5%; border-bottom:none;"><input type="checkbox"
+                                        name="recurrentExacerbation"></th>
                                 <th style="width:95%" colspan="3">Recurrent asthma like symptoms of exacerbation
                                 </th>
 
@@ -411,9 +428,9 @@
                                     <b>Documentation of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="methodChartYoungFirstSectionPreferred">
                                 </td>
-                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
                                     <i>Preferred</i><br>
                                     Documented wheezing or other signs of airflow obstruction observed by a heath care
                                     provider
@@ -421,10 +438,10 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="methodChartYoungFirstSectionAlt">
 
                                 </td>
-                                <td style="text-align: left; border-left: none;">
+                                <td style="text-align: left; border-left: none; padding-left: 5px">
                                     <i>Alternative</i><br>
                                     Convincing paternal report of wheezing or other symptoms
                                 </td>
@@ -437,22 +454,22 @@
                                     <b>Document of reversibility of airflow obstruction</b>
                                 </td>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="methodChartYoungSecondSectionPreferred">
 
                                 </td>
-                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
                                     <i>Preferred</i><br>
                                     Response to bronchodilator within 30 min confirmed by a health care provider
                                 </td>
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none; border-bottom: none;">
-                                    <input type="checkbox">
+                                    <input type="checkbox" name="methodChartYoungSecondSectionAlt1">
 
                                 </td>
-                                <td style="text-align: left; border-left: none; border-bottom: none;">
+                                <td style="text-align: left; border-left: none; border-bottom: none; padding-left: 5px">
                                     <i>Alternative</i><br>
-                                    Gradual but clear response to anti-inflammatory therapy: after ≥ hours of cortical
+                                    Gradual but clear response to anti-inflammatory therapy: after ≥ 4 hours of cortical
                                     steroids
                                     (OCS), within 3 months of moderate dose inhaled cortical steroids (ICS), expect
                                     decreased
@@ -461,10 +478,11 @@
                             </tr>
                             <tr>
                                 <td style="text-align: left; border-right: none;">
-                                    <div><input type="checkbox"></div>
+                                    <div><input type="checkbox" name="methodChartYoungSecondSectionAlt2">
+                                    </div>
 
                                 </td>
-                                <td style="text-align: left; border-left: none;">
+                                <td style="text-align: left; border-left: none; padding-left: 5px">
                                     <i>Alternative</i><br>
                                     Response to bronchodilator within 30 min by parental history
                                 </td>
@@ -515,15 +533,20 @@
                                 <b>Allergy</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyGenericParent" oscarDB=e$last#allergyGenericParent>
+                                <label><input type="checkbox" name="allergyGenericParent"
+                                        oscarDB=e$last#allergyGenericParent></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyGenericSibling"
-                                    oscarDB=e$last#allergyGenericSibling>
+                                <label>
+                                    <input type="checkbox" name="allergyGenericSibling"
+                                        oscarDB=e$last#allergyGenericSibling>
+                                </label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyGenericUnknown"
-                                    oscarDB=e$last#allergyGenericUnknown>
+                                <label>
+                                    <input type="checkbox" name="allergyGenericUnknown"
+                                        oscarDB=e$last#allergyGenericUnknown>
+                                </label>
                             </td>
                         </tr>
                         <tr>
@@ -531,27 +554,34 @@
                                 <b>Allergy drug</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyDrugParent" oscarDB=e$last#allergyDrugParent>
+                                <label><input type="checkbox" name="allergyDrugParent"
+                                        oscarDB=e$last#allergyDrugParent></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyDrugSibling" oscarDB=e$last#allergyDrugSibling>
+                                <label><input type="checkbox" name="allergyDrugSibling"
+                                        oscarDB=e$last#allergyDrugSibling></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyDrugOther" oscarDB=e$last#allergyDrugOther>
+                                <label>
+                                    <input type="checkbox" name="allergyDrugOther" oscarDB=e$last#allergyDrugOther>
                             </td>
+                            </label>
                         </tr>
                         <tr>
                             <td>
                                 <b>Allergy food</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyFoodParent" oscarDB=e$last#allergyFoodParent>
+                                <label><input type="checkbox" name="allergyFoodParent"
+                                        oscarDB=e$last#allergyFoodParent></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyFoodSibling" oscarDB=e$last#allergyFoodSibling>
+                                <label><input type="checkbox" name="allergyFoodSibling"
+                                        oscarDB=e$last#allergyFoodSibling></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyFoodUnknown" oscarDB=e$last#allergyFoodUnknown>
+                                <label><input type="checkbox" name="allergyFoodUnknown"
+                                        oscarDB=e$last#allergyFoodUnknown></label>
                             </td>
                         </tr>
                         <tr>
@@ -559,13 +589,16 @@
                                 <b>Allergy other</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyOtherParent" oscarDB=e$last#allergyOtherParent>
+                                <label><input type="checkbox" name="allergyOtherParent"
+                                        oscarDB=e$last#allergyOtherParent></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyOtherSibling" oscarDB=e$last#allergyOtherSibling>
+                                <label><input type="checkbox" name="allergyOtherSibling"
+                                        oscarDB=e$last#allergyOtherSibling></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyOtherUnknown" oscarDB=e$last#allergyOtherUnknown>
+                                <label><input type="checkbox" name="allergyOtherUnknown"
+                                        oscarDB=e$last#allergyOtherUnknown></label>
                             </td>
                         </tr>
                         <tr>
@@ -573,13 +606,16 @@
                                 <b>Eczema</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEczemaParent" oscarDB=e$last#allergyEczemaParent>
+                                <label><input type="checkbox" name="allergyEczemaParent"
+                                        oscarDB=e$last#allergyEczemaParent></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEczemaSibling" oscarDB=e$last#allergyEczemaSibling>
+                                <label><input type="checkbox" name="allergyEczemaSibling"
+                                        oscarDB=e$last#allergyEczemaSibling></label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEczemaUnknown" oscarDB=e$last#allergyEczemaUnknown>
+                                <label><input type="checkbox" name="allergyEczemaUnknown"
+                                        oscarDB=e$last#allergyEczemaUnknown></label>
                             </td>
                         </tr>
                         <tr>
@@ -587,16 +623,22 @@
                                 <b>Environmental allergies</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEnvironmentalParent"
-                                    oscarDB=e$last#allergyEnvironmentalParent>
+                                <label>
+                                    <input type="checkbox" name="allergyEnvironmentalParent"
+                                        oscarDB=e$last#allergyEnvironmentalParent>
+                                </label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEnvironmentalSibling"
-                                    oscarDB=e$last#allergyEnvironmentalSibling>
+                                <label>
+                                    <input type="checkbox" name="allergyEnvironmentalSibling"
+                                        oscarDB=e$last#allergyEnvironmentalSibling>
+                                </label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyEnvironmentalUnknown"
-                                    oscarDB=e$last#allergyEnvironmentalUnknown>
+                                <label>
+                                    <input type="checkbox" name="allergyEnvironmentalUnknown"
+                                        oscarDB=e$last#allergyEnvironmentalUnknown>
+                                </label>
                             </td>
                         </tr>
                         <tr>
@@ -604,16 +646,22 @@
                                 <b>Hay fever</b>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyHayfeverParent"
-                                    oscarDB=e$last#allergyHayfeverParent>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverParent"
+                                        oscarDB=e$last#allergyHayfeverParent>
+                                </label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyHayfeverSibling"
-                                    oscarDB=e$last#allergyHayfeverSibling>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverSibling"
+                                        oscarDB=e$last#allergyHayfeverSibling>
+                                </label>
                             </td>
                             <td>
-                                <input type="checkbox" name="allergyHayfeverUnknown"
-                                    oscarDB=e$last#allergyHayfeverUnknown>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverUnknown"
+                                        oscarDB=e$last#allergyHayfeverUnknown>
+                                </label>
                             </td>
                         </tr>
                     </table>
@@ -676,7 +724,7 @@
                         <div>
                             <label style="width:25%;"><b>Quit when</b></label>
                             <label>
-                                <input type="textbox" placeholder="YYYY/MM/DD">
+                                <input type="textbox" name="quitWhen" oscarDB=e$last#quitWhen placeholder="YYYY/MM/DD">
                             </label>
                         </div>
                     </div>
@@ -711,52 +759,60 @@
                         <div id="cessationAddressedSection" v-show="showCessationAddressedSection"
                             style="width:400px; display:block; margin-left:119px">
                             <label style=" width:25%; "><b>Ask</b></label>
+                            <input type="hidden" id="pulled-cessationAsk" oscarDB=e$last#cessationAsk />
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationAsk" value="yes" v-model="cessationAsk">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationAsk" value='no' v-model="cessationAsk">
                                 No
                             </label>
                             <br>
                             <label style="width:25%"><b>Advise</b></label>
+                            <input type="hidden" id="pulled-cessationAdvise" oscarDB=e$last#cessationAdvise />
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationAdvise" value="yes" v-model="cessationAdvise">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationAdvise" value="no" v-model="cessationAdvise">
                                 No
                             </label>
                             <br>
                             <label style="width:25%"><b>Arrange</b></label>
+                            <input type="hidden" id="pulled-cessationArrange" oscarDB=e$last#cessationArrange />
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationArrange" value="yes" v-model="cessationArrange">
                                 Yes
                             </label>
                             <label>
-                                <input type="radio" name="beta2">
+                                <input type="radio" name="cessationArrange" value="no" v-model="cessationArrange">
                                 No
                             </label>
                         </div>
                         <div style="width:100%; display:block">
                             <hr style="width:100%; margin:2px 0px 2px 0px; display:block">
                             <label style="width:25%;"><b>Smoking cessation quit intentions</b></label>
+                            <input type="hidden" id="pulled-quitIntentions" oscarDB=e$last#quitIntentions />
                             <label>
-                                <input type="radio" id="quitIntentions" name="allergy" value="nonSmoker">
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="withinMonth">
                                 Within a month
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="within6months">
                                 Within 6 months
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="beyond6months">
                                 Beyond 6 months
                             </label>
                             <label>
-                                <input type="radio" id="quitIntentions" name="allergy" value="exSmoker">
+                                <input type="radio" id="quitIntentions" v-model="quitIntentions" name="quitIntentions"
+                                    value="none">
                                 Not planning to quit
                             </label>
                         </div>
@@ -767,48 +823,51 @@
                     <hr>
                     <div>
                         <label style="width:25%;"><b>E-cigarette/vaping</b></label>
+                        <input type="hidden" id="pulled-vaping" oscarDB=e$last#vaping />
                         <label>
-                            <input type="radio" id="vaping" name="vaping" value="current">
+                            <input type="radio" name="vaping" v-model="vaping" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" id="vaping" name="vaping" value="past">
+                            <input type="radio" name="vaping" v-model="vaping" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" id="vaping" name="vaping" value="never">
+                            <input type="radio" name="vaping" v-model="vaping" value="never">
                             Never
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:25%;"><b>Cannabis use</b></label>
+                        <input type="hidden" id="pulled-cannabis" oscarDB=e$last#cannabis />
                         <label>
-                            <input type="radio" id="cannabisUse" name="cannabis" value="current">
+                            <input type="radio" name="cannabis" v-model="cannabis" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" id="cannabisUse" name="cannabis" value="past">
+                            <input type="radio" name="cannabis" v-model="cannabis" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" id="cannabisUse" name="cannabis" value="never">
+                            <input type="radio" name="cannabis" v-model="cannabis" value="never">
                             Never
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:25%;"><b>Exposure to second-hand smoke</b></label>
+                        <input type="hidden" id="pulled-secondHandSmoke" oscarDB=e$last#secondHandSmoke />
                         <label>
-                            <input type="radio" id="" name="cannabis" value="current">
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="current">
                             Current
                         </label>
                         <label>
-                            <input type="radio" id="" name="cannabis" value="past">
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="past">
                             Past
                         </label>
                         <label>
-                            <input type="radio" id="" name="cannabis" value="never">
+                            <input type="radio" name="secondHandSmoke" v-model="secondHandSmoke" value="never">
                             Never
                         </label>
                     </div>
@@ -832,25 +891,23 @@
                     <div onclick="familyPhysicianVisitsChange()">
                         <label><b>Visit(s) to family physician in the last year for asthma symptoms</b></label>
                         <label>
-                            <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits"
-                                value="yesFamilyPhysicianVisits">
+                            <input type="radio" id="yesFamilyPhysicianVisits" name="physicianVisits" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" id="noFamilyPhysicianVisits" name="physicianVisits"
-                                value="noFamilyPhysicianVisits">
+                            <input type="radio" id="noFamilyPhysicianVisits" name="physicianVisits" value="no">
                             No
                         </label>
                         <label>
                             <input type="radio" id="unknownFamilyPhysicianVisits" name="physicianVisits"
-                                value="unknownFamilyPhysicianVisits">
+                                value="unknown">
                             Unknown
                         </label>
                     </div>
                     <div id="yesRoutineCareVisits">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Routine primary care visits</label>
                         <input type=textbox style="width:50px;" placeholder="#">
-                        <label>Urgent Primary Care Visits</label>
+                        <label>Urgent primary care visits</label>
                         <input type=textbox style="width:50px;" placeholder="#">
                     </div>
                     <hr>
@@ -860,23 +917,23 @@
                             <th style="width:20%">Yes</th>
                             <th style="width:20%">No</th>
                             <th style="width:20%">Unknown</th>
-                            <th style="width:20%">last year</th>
+                            <th style="width:20%">Recent (≤ 1 year)</th>
                         </tr>
                         <tr>
                             <td>
                                 <b>Respirologist</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="respirologistYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="respirologistNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="respirologistUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="respirologistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -884,16 +941,16 @@
                                 <b>General Internist</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="generalInternistYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="generalInternistNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="generalInternistUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="generalInternistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -901,16 +958,16 @@
                                 <b>Allergist</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="allergistYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="allergistNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="allergistUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="allergistRecent"></label>
                             </td>
                         </tr>
                         <tr>
@@ -918,16 +975,16 @@
                                 <b>Pediatrician</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="pediatricianYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="pediatricianNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="pediatricianUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="pediatricianRecent"></label>
                             </td>
                         </tr>
                     </table>
@@ -938,27 +995,48 @@
                             <th style="width:16%">Yes</th>
                             <th style="width:16%">No</th>
                             <th style="width:16%">Unknown</th>
-                            <th style="width:16%">Last year</th>
+                            <th style="width:16%">Recent (≤ 1 year)</th>
                             <th style="width:16%">Total # ever</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Asthma exacerbation ever</b>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationYes"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationNo"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationUnknown"></label>
+                            </td>
+                            <td>
+                                <label><input type="checkbox" name="asthmaExacerbationLastYear"></label>
+                            </td>
+                            <td>
+                                <label><input type="textbox" name="asthmaExacerbationTotalNumber"
+                                        style="width:30px;"></label>
+                            </td>
                         </tr>
                         <tr>
                             <td>
                                 <b>ED visits ever for asthma</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="edVisitsYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="edVisitsNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="edVisitsUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="edVisitsLastYear"></label>
                             </td>
                             <td>
-                                <input type="textbox" style="width:30px;">
+                                <label><input type="textbox" name="edVisitsTotalNumber" style="width:30px;"></label>
                             </td>
                         </tr>
                         <tr>
@@ -966,19 +1044,19 @@
                                 <b>Hospitalized ever for asthma</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="hospitalizedYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="hospitalizedNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="hospitalizedUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="hospitalizedLastYear"></label>
                             </td>
                             <td>
-                                <input type="textbox" style="width:30px;">
+                                <label><input type="textbox" name="hospitalizedTotalNumber" style="width:30px;"></label>
                             </td>
                         </tr>
                         <tr>
@@ -986,19 +1064,20 @@
                                 <b>Near fatal asthma episode</b>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="nearFatalEpisodeYes"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="nearFatalEpisodeNo"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="nearFatalEpisodeUnknown"></label>
                             </td>
                             <td>
-                                <input type="checkbox">
+                                <label><input type="checkbox" name="nearFatalEpisodeLastYear"></label>
                             </td>
                             <td>
-                                <input type="textbox" style="width:30px;">
+                                <label><input type="textbox" name="nearFatalEpisodeTotalNumber"
+                                        style="width:30px;"></label>
                             </td>
                         </tr>
                     </table>
@@ -1024,25 +1103,27 @@
                     <hr>
 
                     <label style="width:30%;">
-                        <b>ICU admissions in the last year</b>
+                        <b>ICU admissions</b> &le;<b> 1 year</b>
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" name="recentBest" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" name="recentBest" value="no">
                         No
                     </label>
                     <label>
-                        <input type="radio" name="recentBest">
+                        <input type="radio" name="recentBest" value="unknown">
                         Unknown
                     </label>
                     <label>
-                        <input type="textbox" style="width:105px;" placeholder="#ICU admissions">
+                        <input type="textbox" style="width:105px;" name="numberOfICUAdmissions"
+                            placeholder="#ICU admissions">
                     </label>
                     <label>
-                        <input type="textbox" style="width:100px;" placeholder="# intubations">
+                        <input type="textbox" style="width:100px;" name="numberOfIntubations"
+                            placeholder="# intubations">
                     </label>
                     <br>
                 </div>
@@ -1053,10 +1134,10 @@
             <div id="-section" class="section">
                 <div class="accordion">
                     <span>
-                        Occupational history
+                        Occupational History
                     </span>
                     <span class="text-align-right right">
-                        <input type="checkbox" id="occupationalNA"
+                        <input type="checkbox" id="occupationalNA" name="occupationalHistoryNA"
                             onclick="toggleSection('occupationalNA', 'occupationalContent')">
                         N/A
                     </span>
@@ -1067,34 +1148,38 @@
                                 apply.</b></label>
                         <span>&nbsp;&nbsp;
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="fullTimeEmployment" oscarDB=e$last#fullTimeEmployment>
                                 Full-Time
                             </label>
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="partTimeEmployment" oscarDB=e$last#partTimeEmployment>
                                 Part-Time
                             </label>
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="shiftWorkEmployment" oscarDB=e$last#shiftWorkEmployment>
                                 Shift work
                             </label>
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="retiredEmployment" oscarDB=e$last#retiredEmployment>
                                 Retired
                             </label>
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="modifiedDutiesEmployment"
+                                    oscarDB=e$last#modifiedDutiesEmployment>
                                 Modified duties
                             </label>
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="offWorkRespiratoryEmployment"
+                                    oscarDB=e$last#offWorkRespiratoryEmployment>
                                 Off work due to respiratory health
                             </label>
                             <br>
                             <label>&nbsp;&nbsp;
-                                <input type="checkbox" id="other" onclick="toggleSectionInline('other','otherSpecify')">
+                                <input type="checkbox" oscarDB=e$last#otherEmployment name="otherEmployment"
+                                    onclick="toggleSectionInline('other','otherSpecify')">
                                 Other
-                                <input id="otherSpecify" style="display:none; width:300px" type="textbox">
+                                <input id="otherSpecify" style="display:none; width:300px" type="textbox"
+                                    name="otherDutiesSpecify" oscarDB=e$last#otherDutiesSpecify>
                             </label>
                         </span>
                     </div>
@@ -1103,47 +1188,48 @@
                         <label style="width:35%">
                             <b>Current employment</b>
                         </label>
-                        <input type="textbox">
+                        <input type="textbox" name="currentEmployment" oscarDB=e$last#currentEmployment>
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Did your asthma symptoms start at work?</b></label>
+                        <input type="hidden" id="pulled-workStart" oscarDB=e$last#workStart />
                         <label>
-                            <input type="radio" name="workStart">
+                            <input type="radio" name="workStart" value="yes" v-model="workStart">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workStart">
+                            <input type="radio" name="workStart" value="no" v-model="workStart">
                             No
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Did your asthma symptoms worsen at at work?</b></label>
+                        <input type="hidden" id="pulled-workWorsen" oscarDB=e$last#workWorsen />
                         <label>
-                            <input type="radio" name="workWorsen">
+                            <input type="radio" name="workWorsen" value="yes" v-model="workWorsen">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="workWorsen">
+                            <input type="radio" name="workWorsen" value="no" v-model="workWorsen">
                             No
                         </label>
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Complete WRASQ(L) today?</b></label>
+                        <input type="hidden" id="pulled-completeWrasql" oscarDB=e$last#completeWrasql />
                         <label>
-                            <input type="radio" name="warsql">
+                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="warsql">
+                            <input type="radio" name="completeWrasql" v-model="completeWrasql" value="no">
                             No
                         </label>
-
                     </div>
                 </div>
-
             </div>
 
             <!-- Medications -->
@@ -1159,65 +1245,269 @@
                     </span>
                 </div>
                 <div id="medicationContent">
-                    <div>
-                        <label><i>Medications in Oscar (for reference only)</i></label>
-                    </div>
+                    <div style="display:block; height:110px;">
+                        <div style="width:49%; float: left;">
+                            <div>
+                                <label><i>Current medications in Oscar (for reference only)</i></label>
+                            </div>
 
-                    <textarea v-show="false" readonly style="width:98%; margin-left:1%" name="oscarMeds"
-                        oscarDB="druglist_generic"></textarea>
-                    <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds"
-                        oscarDB="current_Rx"></textarea>
-                    <hr>
+                            <textarea readonly style="width:98%; margin-left:1%; height: 100px; cursor: default"
+                                name="oscarMeds" oscarDB=current_Rx></textarea>
+
+                        </div>
+                        <div style="width:49%; float: left;">
+
+                            <div>
+                                <label><i>All generic medications Oscar (for reference only)</i></label>
+                            </div>
+                            <textarea v-show="true" readonly="true"
+                                style="width:98%; margin-left:1%; height: 100px; cursor: default" id="oscarGenericDrugs"
+                                oscarDB=druglist_generic></textarea>
+
+                        </div>
+
+                    </div>
+                    <!-- <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds" oscarDB=current_Rx></textarea> -->
+                    <!-- <span onclick="parseMeds()">parse meds</span> -->
                     <!-- <div>
                         <label><b>Current relevant medications</b></label>
                     </div> -->
                     <div>
-                        <label style="width:15%">
-                            <b>Beclomethasone</b>
+                        <br>
+                        <hr>
+
+                        <input type="checkbox" id="beclomethasone" name="beclomethasone" v-model="beclomethasone">
+                        <label for="beclomethasone" style="width:25%">
+                            <b>Beclomethasone dipropionate HFA</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="beclomethasone">
+                            <label>
+                                Strength:
+                                <select name="beclomethasoneStrength" id="beclomethasoneStrength"
+                                    v-model="beclomethasoneStrength" style="width: 90px">
+                                    <option value="50.0">50mcg</option>
+                                    <option value="100.0">100mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="beclomethasoneDose" id="beclomethasoneDose" v-model="beclomethasoneDose"
+                                    style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                    <option value="4">4 puffs</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Frequency:
+                                <select name="beclomethasoneFreq" id="beclomethasoneFreq" v-model="beclomethasoneFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                    <option value="qid">qid</option>
+                                </select>
+                            </label>
+                        </span>
                     </div>
                     <hr>
                     <div>
-                        <label style="width:15%">
+                        <input type="checkbox" name="budesonide" id="budesonide" v-model="budesonide">
+                        <label for="budesonide" style="width:25%">
                             <b>Budesonide</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="budesonide">
+                            <label>
+                                Strength:
+                                <select name="budesonideStrength" id="budesonideStrength" v-model="budesonideStrength"
+                                    style="width: 90px">
+                                    <option value="100.0">100mcg</option>
+                                    <option value="200.0">200mcg</option>
+                                    <option value="400.0">400mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="budesonideDose" id="budesonideDose" v-model="budesonideDose"
+                                    style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                    <option value="4">4 puffs</option>
+                                </select>
+                            </label>
+                            <label>
+                                Frequency:
+                                <select name="budesonideFreq" id="budesonideFreq" v-model="budesonideFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                    <option value="qid">qid</option>
+                                </select>
+                            </label>
+                        </span>
                     </div>
                     <hr>
                     <div>
-                        <label style="width:15%">
+                        <input type="checkbox" name="ciclesonide" id="ciclesonide" v-model="ciclesonide">
+                        <label for="ciclesonide" style="width:25%">
                             <b>Ciclesonide</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="ciclesonide">
+                            <label>
+                                Strength:
+                                <select name="ciclesonideStrength" id="ciclesonideStrength"
+                                    v-model="ciclesonideStrength" style="width: 90px">
+                                    <option value="100.0">100mcg</option>
+                                    <option value="200.0">200mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="ciclesonideDose" id="ciclesonideDose" v-model="ciclesonideDose"
+                                    style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                    <option value="4">4 puffs</option>
+                                </select>
+                            </label>
+                            <!-- <label>
+                                Frequency:
+                                <select name="ciclesonideFreq" id="ciclesonideFreq" v-model="ciclesonideFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                </select>
+                            </label> -->
+                        </span>
                     </div>
                     <hr>
                     <div>
-                        <label style="width:15%">
-                            <b>Fluticasoneproionate</b>
+                        <input type="checkbox" name="fluticasonePropionate" id="fluticasonePropionate"
+                            v-model="fluticasonePropionate">
+                        <label for="fluticasonePropionate" style="width:25%">
+                            <b>Fluticasone propionate</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="fluticasonePropionate">
+                            <label>
+                                Strength:
+                                <select name="fluticasonePropionateStrength" id="budesonideStrength"
+                                    v-model="fluticasonePropionateStrength" style="width: 90px">
+                                    <option value="100.0">100mcg</option>
+                                    <option value="250.0">250mcg</option>
+                                    <option value="500.0">500mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="fluticasonePropionateDose" id="fluticasonePropionateDose"
+                                    v-model="fluticasonePropionateDose" style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                    <option value="4">4 puffs</option>
+                                    <option value="5">5 puffs</option>
+                                </select>
+                            </label>
+                            <label>
+                                Frequency:
+                                <select name="fluticasonePropionateFreq" id="fluticasonePropionateFreq"
+                                    v-model="fluticasonePropionateFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                    <option value="qid">qid</option>
+                                </select>
+                            </label>
+                        </span>
                     </div>
                     <hr>
                     <div>
-                        <label style="width:15%">
+                        <input type="checkbox" name="fluticasoneFuroate" id="fluticasoneFuroate"
+                            v-model="fluticasoneFuroate">
+                        <label for="fluticasoneFuroate" style="width:25%">
                             <b>Fluticasone furoate</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="fluticasoneFuroate">
+                            <label>
+                                Strength:
+                                <select name="fluticasoneFuroateStrength" id="budesonideStrength"
+                                    v-model="fluticasoneFuroateStrength" style="width: 90px">
+                                    <option value="100.0">100mcg</option>
+                                    <option value="200.0">200mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="fluticasoneFuroateDose" id="fluticasoneFuroateDose"
+                                    v-model="fluticasoneFuroateDose" style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                </select>
+                            </label>
+                            <label>
+                                Frequency:
+                                <select name="fluticasoneFuroateFreq" id="fluticasoneFuroateFreq"
+                                    v-model="fluticasoneFuroateFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                    <option value="bid">qid</option>
+                                </select>
+                            </label>
+                        </span>
                     </div>
                     <hr>
                     <div>
-                        <label style="width:15%">
+                        <input type="checkbox" name="mometasoneFuroate" id="mometasoneFuroate"
+                            v-model="mometasoneFuroate">
+                        <label for="mometasoneFuroate" style="width:25%">
                             <b>Mometasone furoate</b>
                         </label>
-                        <input type="checkbox">
+                        <span v-if="mometasoneFuroate">
+                            <label>
+                                Strength:
+                                <select name="mometasoneFuroateStrength" id="budesonideStrength"
+                                    v-model="mometasoneFuroateStrength" style="width: 90px">
+                                    <option value="50.0">50mcg</option>
+                                    <option value="100.0">100mcg</option>
+                                    <option value="200.0">200mcg</option>
+                                    <option value="400.0">400mcg</option>
+                                </select>
+                            </label>
+                            <label>
+                                Dose:
+                                <select name="mometasoneFuroateDose" id="mometasoneFuroateDose"
+                                    v-model="mometasoneFuroateDose" style="width: 90px">
+                                    <option value="1">1 puff</option>
+                                    <option value="2">2 puffs</option>
+                                    <option value="3">3 puffs</option>
+                                    <option value="4">4 puffs</option>
+                                </select>
+                            </label>
+                            <label>
+                                Frequency:
+                                <select name="mometasoneFuroateFreq" id="mometasoneFuroateFreq"
+                                    v-model="mometasoneFuroateFreq">
+                                    <option value="oid">oid</option>
+                                    <option value="bid">bid</option>
+                                    <option value="qid">qid</option>
+                                </select>
+                            </label>
+                        </span>
+
                     </div>
                     <hr>
                     <div>
-                        <label style="width:30%">
+                        <label style="width:35%">
                             <b>On a second controller for the previous year</b>
                         </label>
-                        <input type="checkbox">
+                        <label class="cursor">
+                            <input type="radio" name="secController" value="yes">
+                            Yes
+                        </label>
+                        <label class="cursor">
+                            <input type="radio" name="secController" value="no">
+                            No
+                        </label>
                     </div>
                     <hr>
                     <table style="margin:5px; width: 99%; text-align: left;">
@@ -1232,27 +1522,27 @@
                                 <b>Is patient using inhaled corticosteroids (ICS)?</b>
                             </td>
                             <td>
-                                <input type="radio" name="ics">
+                                <label><input type="radio" name="ics" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="ics">
+                                <label><input type="radio" name="ics" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="ics">
+                                <label><input type="radio" name="ics" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <b>Beta Blockers </b>
+                                <b>Beta-Blockers </b>
                             </td>
                             <td>
-                                <input type="radio" name="betaBlockers">
+                                <label><input type="radio" name="betaBlockers" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="betaBlockers">
+                                <label><input type="radio" name="betaBlockers" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="betaBlockers">
+                                <label><input type="radio" name="betaBlockers" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1260,13 +1550,13 @@
                                 <b>NSAIDS</b>
                             </td>
                             <td>
-                                <input type="radio" name="nsaids">
+                                <label><input type="radio" name="nsaids" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="nsaids">
+                                <label><input type="radio" name="nsaids" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="nsaids">
+                                <label><input type="radio" name="nsaids" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1274,13 +1564,13 @@
                                 <b>Patient has a spacing device</b>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDevice">
+                                <label><input type="radio" name="spacingDevice" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDevice">
+                                <label><input type="radio" name="spacingDevice" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDevice">
+                                <label><input type="radio" name="spacingDevice" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1289,13 +1579,13 @@
                                     used?</b>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDeviceAllowed">
+                                <label><input type="radio" name="spacingDeviceAllowed" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDeviceAllowed">
+                                <label><input type="radio" name="spacingDeviceAllowed" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="spacingDeviceAllowed">
+                                <label><input type="radio" name="spacingDeviceAllowed" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1303,13 +1593,13 @@
                                 <b>Adherence issues known or suspected</b>
                             </td>
                             <td>
-                                <input type="radio" name="adherenceIssues">
+                                <label><input type="radio" name="adherenceIssues" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="adherenceIssues">
+                                <label><input type="radio" name="adherenceIssues" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="adherenceIssues">
+                                <label><input type="radio" name="adherenceIssues" value="unknown"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1321,13 +1611,13 @@
                                     not obtained.)</i>
                             </td>
                             <td>
-                                <input type="radio" name="unfilledPrescriptions">
+                                <label><input type="radio" name="unfilledPrescriptions" value="yes"></label>
                             </td>
                             <td>
-                                <input type="radio" name="unfilledPrescriptions">
+                                <label><input type="radio" name="unfilledPrescriptions" value="no"></label>
                             </td>
                             <td>
-                                <input type="radio" name="unfilledPrescriptions">
+                                <label><input type="radio" name="unfilledPrescriptions" value="unknown"></label>
                             </td>
                         </tr>
                     </table>
@@ -1336,7 +1626,8 @@
                         <label><b>Number of inhaled corticosteroid prescriptions
                                 filled in the last year</b></label>
                         <label>
-                            <input type=textbox style="width:30px;" placeholder="#"></label>
+                            <input type=textbox style="width:30px;" name="numInhaledCorticosteroid"
+                                placeholder="#"></label>
                         <label><i>(Prescription = one month supply)</i></label>
 
                     </div>
@@ -1345,7 +1636,7 @@
                         <label style="width:35%"><b>SABA use</b></label>
                         <label>
                             <select name="saba" id="saba">
-                                <option value="">Unknown</option>
+                                <option value="unknown">Unknown</option>
                                 <option value="less-than-1">&#60; 1 canister a month</option>
                                 <option value="1-2">1-2 canister(s) a month</option>
                                 <option value="more-than2">&#62; 2 canisters a month</option>
@@ -1356,27 +1647,28 @@
                     <div>
                         <label style="width:35%"><b>Beta&#8322;-agonist free day(s) in the last 4 weeks?</b></label>
                         <label>
-                            <input type="radio" name="beta2">
+                            <input type="radio" name="beta2freeDays" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="beta2">
+                            <input type="radio" name="beta2freeDays" value="no">
                             No
                         </label>
+
                     </div>
                     <hr>
                     <div>
                         <label style="width:35%"><b>Systemic steroid use ever</b></label>
                         <label>
-                            <input type="radio" name="systemicSteroid">
+                            <input type="radio" name="systemicSteroid" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="systemicSteroid">
+                            <input type="radio" name="systemicSteroid" value="no">
                             No
                         </label>
                         <label>
-                            <input type="radio" name="systemicSteroid">
+                            <input type="radio" name="systemicSteroid" value="unknown">
                             Unknown
                         </label>
                     </div>
@@ -1385,15 +1677,15 @@
                     <div>
                         <label style="width:35%"><b>If yes, indication for systemic steroid use</b></label>
                         <label>
-                            <input type="radio" name="steroidIndication">
+                            <input type="radio" name="steroidIndication" value="asthma">
                             Asthma
                         </label>
                         <label>
-                            <input type="radio" name="steroidIndication">
+                            <input type="radio" name="steroidIndication" value="copd">
                             COPD
                         </label>
                         <label>
-                            <input type="radio" name="steroidIndication">
+                            <input type="radio" name="steroidIndication" value="both">
                             Both
                         </label>
                     </div>
@@ -1402,10 +1694,10 @@
                         <label><b>Total number of times systemic steroid used within the last
                                 year</b></label>
                         <label>
-                            <input type="textbox" style="width:30px" placeholder="#">
+                            <input type="textbox" name="numSystemicSteroidLastYear" style="width:30px" placeholder="#">
                         </label>
                         <label>
-                            <input type="textbox" placeholder="YYYY//MM/DD">
+                            <input type="textbox" name="systemicSteroidDateLastUsed" placeholder="YYYY//MM/DD">
                             Date last used
 
                         </label>
@@ -1415,15 +1707,15 @@
                         <label><b>Systemic steroid used for 50% of the previous year</b>
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="yes">
                             Yes
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="no">
                             No
                         </label>
                         <label>
-                            <input type="radio" name="corticosteroidUsedPreviousYear">
+                            <input type="radio" name="corticosteroidUsedPreviousYear" value="unknown">
                             Unknown
                         </label>
                     </div>
@@ -1510,10 +1802,10 @@
                     <div>
                         <label style="width:32%"><b>Dates of exacerbations</b></label>
                         <label>
-                            <input type="textbox" placeholder="YYYY/MM/DD">
+                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate1">
                         </label>
                         <label>
-                            <input type="textbox" placeholder="YYYY/MM/DD">
+                            <input type="textbox" placeholder="YYYY/MM/DD" name="exacerbationDate2">
                         </label>
                     </div>
                     <div>
@@ -1552,10 +1844,10 @@
                     <div>
                         <label style="width:32%"><b>Sputum eosinophils</b></label>
                         <label>
-                            <input type="radio" name="sputumEosinophils">Yes
+                            <input type="radio" name="sputumEosinophils" value="yes">Yes
                         </label>
                         <label>
-                            <input type="radio" name="sputumEosinophils">No
+                            <input type="radio" name="sputumEosinophils" value="no">No
                         </label>
                         &nbsp;&nbsp;&nbsp;
                         <input type="textbox" placeholder="%" style="width:40px">
@@ -1566,7 +1858,8 @@
                     </div>
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
-                        <label style="width:32%"><b>FEV or PEF &#62;= 90% predicted or personal best</b></label>
+                        <label style="width:32%"><b>FEV&#8321; or PEF &#62;= 90% predicted or personal
+                                best</b></label>
                         <label>
                             <input type="radio" name="FEVPersonalBest">Yes
                         </label>
@@ -1587,18 +1880,19 @@
                     <hr style="margin:2px 0px 2px 0px">
                     <label><b>Number of days missed from school or work due to asthma in last year
                         </b>
-                        <input type="textbox" style="vertical-align: bottom; width:50px" placeholder="#">
+                        <input type="textbox" name="numberDaysMissedLastYear" style="vertical-align: bottom; width:50px"
+                            placeholder="#">
                     </label>
                     <hr style="margin:2px 0px 2px 0px">
                     <div>
                         <label style="width:32%"><b>Asthma controlled</b></label>
                         <label v-show="false">
                             <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
-                                id="asthmaControlled" value="Yes">Yes
+                                id="asthmaControlled" value="yes">Yes
                         </label>
                         <label v-show="false">
                             <input type="radio" readonly name="asthmaControlled" v-model="asthmaControlled"
-                                value="No">No
+                                value="no">No
                         </label>
                         <b>{{ asthmaControlled }}</b>
                     </div>
@@ -1618,7 +1912,7 @@
             <div id="-section" class="section">
                 <div class="accordion">
                     <span>
-                        Care and management / referrals
+                        Care and Management / Referrals
                     </span>
                     <span class="text-align-right right">
                         <input type="checkbox" id="careNA" onclick="toggleSection('careNA', 'careContent')">
@@ -1637,10 +1931,10 @@
                                 <b>Patient technique optimal</b>
                             </td>
                             <td>
-                                <input type="radio" name="techniqueOptimal">
+                                <label><input type="radio" name="techniqueOptimal"></label>
                             </td>
                             <td>
-                                <input type="radio" name="techniqueOptimal">
+                                <label><input type="radio" name="techniqueOptimal"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1648,10 +1942,10 @@
                                 <b>Triggers addressed</b>
                             </td>
                             <td>
-                                <input type="radio" name="triggersAddressed">
+                                <label><input type="radio" name="triggersAddressed"></label>
                             </td>
                             <td>
-                                <input type="radio" name="triggersAddressed">
+                                <label><input type="radio" name="triggersAddressed"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1659,10 +1953,10 @@
                                 <b>Environmental controls reviewed</b>
                             </td>
                             <td>
-                                <input type="radio" name="environmentalControlsReviewed">
+                                <label><input type="radio" name="environmentalControlsReviewed"></label>
                             </td>
                             <td>
-                                <input type="radio" name="environmentalControlsReviewed">
+                                <label><input type="radio" name="environmentalControlsReviewed"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1670,10 +1964,10 @@
                                 <b>Barriers addressed</b>
                             </td>
                             <td>
-                                <input type="radio" name="barriersAddressed">
+                                <label><input type="radio" name="barriersAddressed"></label>
                             </td>
                             <td>
-                                <input type="radio" name="barriersAddressed">
+                                <label><input type="radio" name="barriersAddressed"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1681,10 +1975,10 @@
                                 <b>Referral to asthma education program/CRE</b>
                             </td>
                             <td>
-                                <input type="radio" name="referralToEducation">
+                                <label><input type="radio" name="referralToEducation"></label>
                             </td>
                             <td>
-                                <input type="radio" name="referralToEducation">
+                                <label><input type="radio" name="referralToEducation"></label>
                             </td>
                         </tr>
                     </table>
@@ -1696,7 +1990,7 @@
             <div id="-section" class="section">
                 <div class="accordion">
                     <span>
-                        Asthma action plan
+                        Asthma Action Plan
                     </span>
                     <span class="text-align-right right">
                         <input type="checkbox" id="actionPlanNA"
@@ -1717,13 +2011,14 @@
                                 <b>Written asthma action plan provided</b>
                             </td>
                             <td>
-                                <input type="radio" name="writtenPlanProvided">
+                                <label><input type="radio" name="writtenPlanProvided"></label>
                             </td>
                             <td>
-                                <input type="radio" name="writtenPlanProvided">
+                                <label><input type="radio" name="writtenPlanProvided"></label>
                             </td>
                             <td>
-                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                                <label><input type="textbox" name="writtenPlanProvidedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1731,13 +2026,14 @@
                                 <b>Written asthma action plan revised</b>
                             </td>
                             <td>
-                                <input type="radio" name="writtenPlanRevised">
+                                <label><input type="radio" name="writtenPlanRevised"></label>
                             </td>
                             <td>
-                                <input type="radio" name="writtenPlanRevised">
+                                <label><input type="radio" name="writtenPlanRevised"></label>
                             </td>
                             <td>
-                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                                <label><input type="textbox" name="writtenPlanRevisedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1745,13 +2041,14 @@
                                 <b>Asthma action plan reviewed & not changed</b>
                             </td>
                             <td>
-                                <input type="radio" name="reviewedNotChanged">
+                                <label><input type="radio" name="reviewedNotChanged"></label>
                             </td>
                             <td>
-                                <input type="radio" name="reviewedNotChanged">
+                                <label><input type="radio" name="reviewedNotChanged"></label>
                             </td>
                             <td>
-                                <input type="textbox" placeholder="YYYY/MM/DDY">
+                                <label><input type="textbox" name="reviewedNotChangedDate"
+                                        placeholder="YYYY/MM/DDY"></label>
                             </td>
                         </tr>
                         <tr>
@@ -1759,13 +2056,13 @@
                                 <b>Yellow or red zone of action plan</b>
                             </td>
                             <td>
-                                <input type="radio" name="yellowOrRed">
+                                <label><input type="radio" name="yellowOrRed"></label>
                             </td>
                             <td>
-                                <input type="radio" name="yellowOrRed">
+                                <label><input type="radio" name="yellowOrRed"></label>
                             </td>
                             <td>
-                                <input type="textbox" placeholder="# of times">
+                                <label><input type="textbox" name="yellowOrRedDate" placeholder="# of times"></label>
                             </td>
                         </tr>
                     </table>
@@ -1776,7 +2073,7 @@
             <div id="-section" class="section">
                 <div class="accordion">
                     <span>
-                        Asthma control zone
+                        Asthma Control Zone
                     </span>
                     <span class="text-align-right right">
                         <input type="checkbox" id="controlZoneNA"
@@ -1827,24 +2124,24 @@
                     </span>
                 </div>
                 <div id="pulmonaryContent">
-                    <label style="width:45%"><b>Patient was monitored for spirometry in the last year</b></label>
+                    <label style="width:45%"><b>Patient was monitored for spirometry in the 12 months</b></label>
                     <label>
-                        <input type="radio" id="spirometryLast12" name="" value="Yes">
+                        <input type="radio" name="spirometryLast12" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" id="spirometryLast12" name="" value="No">
+                        <input type="radio" name="spirometryLast12" value="no">
                         No
                     </label>
 
                     <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Persistent airflow obstruction</b></label>
                     <label>
-                        <input type="radio" id="spirometryLast12" name="" value="Yes">
+                        <input type="radio" name="persistentAirflowObstruction" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" id="spirometryLast12" name="" value="No">
+                        <input type="radio" name="persistentAirflowObstruction" value="no">
                         No
                     </label>
                     <label> <i>
@@ -1875,15 +2172,27 @@
                     <label style="width:45%"><b>Quality of Life assessment completed
                         </b></label>
                     <label>
-                        <input type="radio" id="" name="qualityAssessmentCompleted" value="Yes">
+                        <input type="radio" name="qualityAssessmentCompleted" value="yes">
                         Yes
                     </label>
                     <label>
-                        <input type="radio" id="" name="qualityAssessmentCompleted" value="No">
+                        <input type="radio" name="qualityAssessmentCompleted" value="no">
                         No
                     </label>
                     <hr style="margin:2px 0px 2px 0px">
-
+                    <label style="width:45%"><b>Yellow or Red Zone of Action plan followed since last visit
+                        </b></label>
+                    <label>
+                        <input type="radio" name="actionPlanSinceLast" value="yes">
+                        Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="actionPlanSinceLast" value="no">
+                        No
+                    </label>
+                    <input type="number" id="score1" name="actionPlanSinceLastNum" placeholder="# of times"
+                        style="width:80px; margin-left: 20px;">
+                    <hr style="margin:2px 0px 2px 0px">
                     <label style="width:45%"><b>Mini Asthma Quality of Life Questionnaire score
                         </b></label>
                     <input type="number" id="score1" name="score1" min="1" max="7" placeholder="#">
@@ -1906,7 +2215,8 @@
                 </div>
             </div>
             <div>
-                <input value="Save & Close" class="button" name="SubmitButton" id="SubmitButton" type="submit" />
+                <input value="Save & Close" class="button" name="SubmitButton" id="SubmitButton" type="submit"
+                    onclick="beforeSubmit()" />
             </div>
         </div>
 
@@ -1985,21 +2295,6 @@
             }
         }
 
-        // function calcDOB() {
-        //     var dobVal = parseInt(document.getElementById("dob").value);
-        //     if (dobVal) {
-        //         if (dobVal > 2015) {
-        //             document.getElementById("oldSection").style.display = "none";
-        //             document.getElementById("youngSection").style.display = "block";
-        //         } else {
-        //             document.getElementById("youngSection").style.display = "none";
-        //             document.getElementById("oldSection").style.display = "block";
-
-        //         }
-
-        //     }
-        // }
-
         top.window.moveTo(0, 0);
         if (document.all) {
             top.window.resizeTo(screen.availWidth, screen.availHeight);
@@ -2010,16 +2305,6 @@
                 top.window.outerWidth = 1050;
             }
         }
-
-        // window.onload = function () {
-        // }
-
-        // document.addEventListener("DOMContentLoaded", () => {
-        // if (document.getElementById('activityIsLimited').checked) {
-        //     var _activityLimited = "yes";
-        // } else {
-        //     var _activityLimited = "no";
-        // }
 
         var app = new Vue({
             el: '#app',
@@ -2032,13 +2317,90 @@
                 // activityLimited: _activityLimited,
                 asthmaControlled: null,
                 encounterDate: document.getElementById("encounterDate").value,
-                diagnosis: document.getElementById("pulledDiagnosis").value
+                diagnosis: document.getElementById("pulledDiagnosis").value,
+                cessationAsk: document.getElementById("pulled-cessationAsk").value,
+                cessationAdvise: document.getElementById("pulled-cessationAdvise").value,
+                cessationArrange: document.getElementById("pulled-cessationArrange").value,
+                quitIntentions: document.getElementById("pulled-quitIntentions").value,
+                vaping: document.getElementById("pulled-vaping").value,
+                cannabis: document.getElementById("pulled-cannabis").value,
+                secondHandSmoke: document.getElementById("pulled-secondHandSmoke").value,
+                workStart: document.getElementById("pulled-workStart").value,
+                workWorsen: document.getElementById("pulled-workWorsen").value,
+                completeWrasql: document.getElementById("pulled-completeWrasql").value,
+                // medications
+                beclomethasone: false,
+                beclomethasoneStrength: "",
+                beclomethasoneDose: "",
+                beclomethasoneFreq: "",
+                budesonide: false,
+                budesonideStrength: "",
+                budesonideDose: "",
+                budesonideFreq: "",
+                ciclesonide: false,
+                ciclesonideStrength: "",
+                ciclesonideDose: "",
+                ciclesonideFreq: "",
+                fluticasonePropionate: false,
+                fluticasonePropionateStrength: "",
+                fluticasonePropionateDose: "",
+                fluticasonePropionateFreq: "",
+                fluticasoneFuroate: false,
+                fluticasoneFuroateStrength: "",
+                fluticasoneFuroateDose: "",
+                fluticasoneFuroateFreq: "",
+                mometasoneFuroate: false,
+                mometasoneFuroateStrength: "",
+                mometasoneFuroateFreq: "",
+                mometasoneFuroateDose: ""
             },
             watch: {
                 // whenever question changes, this function will run
                 dob: function (newDob) {
                     calcAge(newDob)
-                }
+                },
+                beclomethasone: function (v) {
+                    if (!v) {
+                        app.beclomethasoneStrength = "";
+                        app.beclomethasoneDose = "";
+                        app.beclomethasoneFreq = "";
+                    }
+                },
+                budesonide: function (v) {
+                    if (!v) {
+                        app.budesonideStrength = "";
+                        app.budesonideDose = "";
+                        app.budesonideFreq = "";
+                    }
+                },
+                ciclesonide: function (v) {
+                    if (!v) {
+                        app.ciclesonideStrength = "";
+                        app.ciclesonideDose = "";
+                        app.ciclesonideFreq = "";
+                    }
+                },
+                fluticasonePropionate: function (v) {
+                    if (!v) {
+                        app.fluticasonePropionateStrength = "";
+                        app.fluticasonePropionateDose = "";
+                        app.fluticasonePropionateFreq = "";
+                    }
+                },
+                fluticasoneFuroate: function (v) {
+                    if (!v) {
+                        app.fluticasoneFuroateStrength = "";
+                        app.fluticasoneFuroateDose = "";
+                        app.fluticasoneFuroateFreq = "";
+                    }
+                },
+                mometasoneFuroate: function (v) {
+                    if (!v) {
+                        app.mometasoneFuroateStrength = "";
+                        app.mometasoneFuroateFreq = "";
+                        app.mometasoneFuroateDose = "";
+                    }
+                },
                 // ableSpirometry: function (newAbleSpirometry) {
                 //     if (newAbleSpirometry) {
                 //         youngPatient = fals
@@ -2048,6 +2410,259 @@
             },
         });
 
+        var drugList = document.getElementById("oscarGenericDrugs").value.toUpperCase();;
+
+
+        // Beclomethasone dipropionate HFA
+        if (drugList.indexOf("BECLOMETHASONE DIPROPIONATE") !== -1) {
+            app.beclomethasone = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("BECLOMETHASONE DIPROPIONATE") + 28;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine);
+            } else {
+                restOfLine = drugList.slice(drugEndPosition);
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.beclomethasoneStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.beclomethasoneFreq = "oid";
+            } else if (restOfLine.indexOf("BID") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+            } else if (restOfLine.indexOf("QID") != -1) {
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.beclomethasoneDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+        // Budesonide
+        if (drugList.indexOf("BUDESONIDE") !== -1) {
+            app.budesonide = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("BUDESONIDE") + 11;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine);
+            } else {
+                restOfLine = drugList.slice(drugEndPosition);
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.budesonideStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.budesonideFreq = "oid";
+            } else if (restOfLine.indexOf(" BID ") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+                app.budesonideFreq = "bid";
+            } else if (restOfLine.indexOf("QID") != -1) {
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.budesonideDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+        // CICLESONIDE
+        if (drugList.indexOf("CICLESONIDE") !== -1) {
+            app.ciclesonide = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("CICLESONIDE") + 12;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine);
+            } else {
+                restOfLine = drugList.slice(drugEndPosition);
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.ciclesonideStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.ciclesonideFreq = "oid";
+            } else if (restOfLine.indexOf("BI") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+                app.ciclesonideFreq = "bid";
+            } else if (restOfLine.indexOf("QID") != -1) {
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.ciclesonideDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+        // FLUTICASONE PROPIONATE
+        if (drugList.indexOf("FLUTICASONE PROPIONATE") !== -1) {
+            app.fluticasonePropionate = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("FLUTICASONE PROPIONATE") + 23;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
+            } else {
+                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.fluticasonePropionateStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.fluticasonePropionateFreq = "oid";
+            } else if (restOfLine.indexOf("BID") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+                app.fluticasonePropionateFreq = "bid";
+            } else if (restOfLine.indexOf(" QID ") != -1) {
+                app.fluticasonePropionateFreq = "qid";
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.fluticasonePropionateDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+
+        // FLUTICASONE PROPIONATE
+        if (drugList.indexOf("FLUTICASONE FUROATE") !== -1) {
+            app.fluticasoneFuroate = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("FLUTICASONE FUROATE") + 20;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
+            } else {
+                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.fluticasoneFuroateStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.fluticasoneFuroateFreq = "oid";
+            } else if (restOfLine.indexOf(" BID ") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+                app.fluticasoneFuroateFreq = "bid";
+            } else if (restOfLine.indexOf(" QID ") != -1) {
+                app.fluticasoneFuroateFreq = "qid";
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.fluticasoneFuroateDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+        // Mometasone furoate
+        if (drugList.indexOf("MOMETASONE FUROATE") !== -1) {
+            app.mometasoneFuroate = true;
+            // find index of end of drug name + 1 space
+            let drugEndPosition = drugList.indexOf("MOMETASONE FUROATE") + 19;
+
+            // grab the rest of the line
+            let endOfLine = drugList.indexOf("\n", drugEndPosition);
+            var restOfLine = "";
+            if (endOfLine != 1) {
+                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
+            } else {
+                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
+            }
+            let strengthPos = restOfLine.indexOf("MCG");
+            if (restOfLine.slice(0, strengthPos) != -1) {
+                app.mometasoneFuroateStrength = restOfLine.slice(0, strengthPos);
+            }
+
+            let freqPos = "-1";
+            // search for index of dose
+            if (restOfLine.indexOf(" OD ") != -1) {
+                freqPos = restOfLine.indexOf("OD") - 2;
+                app.mometasoneFuroateFreq = "oid";
+            } else if (restOfLine.indexOf(" BID ") != -1) {
+                freqPos = restOfLine.indexOf("BID") - 2;
+                app.mometasoneFuroateFreq = "bid";
+            } else if (restOfLine.indexOf(" QID ") != -1) {
+                app.mometasoneFuroateFreq = "qid";
+                freqPos = restOfLine.indexOf("QID") - 2;
+            }
+
+            // find frequency
+            if (freqPos != "-1") {
+                app.mometasoneFuroateDose = restOfLine.slice(freqPos, freqPos + 1);
+            };
+        }
+
+
+        let _checkboxList = document.querySelectorAll("input[type='checkbox']");
+
+        //value pulled from oscar but need to loop through to check the boxes
+        _checkboxList.forEach(function (element) {
+            if (element.value == "true") {
+                element.checked = true;
+            }
+        });
+
+        beforeSubmit = function () {
+            _checkboxList.forEach(function (element) {
+
+                if (element.checked) {
+                    element.value = "true";
+                }
+            });
+        }
+
+
         // check if new form based on existing encounter date data
         if (!app.encounterDate) {
             var d = new Date();
@@ -2056,9 +2671,7 @@
 
         calcAge = function (_dob) {
             var dob = new Date(_dob);
-            // console.log(dob.isValid())
-            console.log(dob.getTime())
-            // if (!isNaN(dob.getTime())) {
+
             var month_diff = Date.now() - dob.getTime();
 
             //convert the calculated difference in date format  
@@ -2069,7 +2682,7 @@
 
             //now calculate the age of the user  
             var age = Math.abs(year - 1970);
-            console.log(age)
+
             if (age > 5) {
                 app.youngPatient = false;
                 app.ableSpirometry = true;
