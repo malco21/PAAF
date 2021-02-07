@@ -22,6 +22,10 @@
             margin: 2px 0px 2px 0px
         }
 
+        .med-calc-section {
+            margin: 10px;
+            border: 1px solid darkgray;
+        }
 
         label {
             padding: 1px 5px 1px 5px;
@@ -72,6 +76,15 @@
             width: 50%;
         }
 
+        .medication-normal {}
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .medication-tall {}
+
         table,
         th,
         td {
@@ -108,6 +121,25 @@
             padding-right: 5px;
             margin-left: -1px;
             margin-top: -1px;
+        }
+
+        .accordion-banner {
+            display: inline-block;
+            background: #ff9800;
+            width: calc(100% - 10px);
+            color: white;
+            font-weight: bold;
+            /* font-style: italic; */
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-top: -1px;
+        }
+
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            line-height: 18px;
+            /* transition: 0.3s; */
         }
 
         .block {
@@ -1238,277 +1270,298 @@
                     <span>
                         Medications
                     </span>
-                    <span class="text-align-right right">
+                    <span class="text-align-right right" v-show="medication-banner">
                         <input type="checkbox" id="medicationNA"
                             onclick="toggleSection('medicationNA', 'medicationContent')">
                         N/A
                     </span>
                 </div>
                 <div id="medicationContent">
-                    <div style="display:block; height:110px;">
+                    <div v-show="false" style="display:block; height:110px;">
                         <div style="width:49%; float: left;">
                             <div>
                                 <label><i>Current medications in Oscar (for reference only)</i></label>
                             </div>
-
                             <textarea readonly style="width:98%; margin-left:1%; height: 100px; cursor: default"
                                 name="oscarMeds" oscarDB=current_Rx></textarea>
-
                         </div>
                         <div style="width:49%; float: left;">
-
                             <div>
                                 <label><i>All generic medications Oscar (for reference only)</i></label>
                             </div>
                             <textarea v-show="true" readonly="true"
                                 style="width:98%; margin-left:1%; height: 100px; cursor: default" id="oscarGenericDrugs"
                                 oscarDB=druglist_generic></textarea>
-
                         </div>
-
                     </div>
+                    <div class="accordion-banner" v-show="medicationBanner">
+                        Patient medications were imported from Oscar. Please review and update where necessary.
+                        <span class="close-btn" v-on:click="medicationBanner = false">&#10006;</span>
+                    </div>
+                    <label>
+                        <b>Green Zone Controllers</b>
+                    </label><br>
+                    <label><i>The following medications are required to determine asthma severity. <br> Do not include
+                            yellow
+                            or red zone medications. For combination drugs, please enter
+                            the strength of the relevant drug. </i></label>
                     <!-- <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds" oscarDB=current_Rx></textarea> -->
                     <!-- <span onclick="parseMeds()">parse meds</span> -->
                     <!-- <div>
                         <label><b>Current relevant medications</b></label>
                     </div> -->
-                    <div>
-                        <br>
+                    <div class="med-calc-section">
+                        <div class="flex-center">
+                            <input type="checkbox" id="beclomethasone" name="beclomethasone" v-model="beclomethasone">
+                            <label for="beclomethasone" style="width:25%">
+                                <b>Beclomethasone dipropionate HFA</b>
+                                <i>(QVAR pMDI)</i>
+                            </label>
+                            <span v-if="beclomethasone">
+                                <label>
+                                    Strength:
+                                    <select name="beclomethasoneStrength" id="beclomethasoneStrength"
+                                        v-model="beclomethasoneStrength" style="width: 90px">
+                                        <option value="50.0">50mcg</option>
+                                        <option value="100.0">100mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="beclomethasoneDose" id="beclomethasoneDose"
+                                        v-model="beclomethasoneDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+
+                                <label>
+                                    Frequency:
+                                    <select name="beclomethasoneFreq" id="beclomethasoneFreq"
+                                        v-model="beclomethasoneFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
                         <hr>
-
-                        <input type="checkbox" id="beclomethasone" name="beclomethasone" v-model="beclomethasone">
-                        <label for="beclomethasone" style="width:25%">
-                            <b>Beclomethasone dipropionate HFA</b>
-                        </label>
-                        <span v-if="beclomethasone">
-                            <label>
-                                Strength:
-                                <select name="beclomethasoneStrength" id="beclomethasoneStrength"
-                                    v-model="beclomethasoneStrength" style="width: 90px">
-                                    <option value="50.0">50mcg</option>
-                                    <option value="100.0">100mcg</option>
-                                </select>
+                        <div class="flex-center">
+                            <input type="checkbox" name="budesonide" id="budesonide" v-model="budesonide">
+                            <label for="budesonide" style="width:25%">
+                                <b>Budesonide</b><br>
+                                <i>(Pulmicort, Symbicort)</i>
                             </label>
-                            <label>
-                                Dose:
-                                <select name="beclomethasoneDose" id="beclomethasoneDose" v-model="beclomethasoneDose"
-                                    style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                    <option value="4">4 puffs</option>
-                                </select>
+                            <span v-if="budesonide">
+                                <label>
+                                    Strength:
+                                    <select name="budesonideStrength" id="budesonideStrength"
+                                        v-model="budesonideStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                        <option value="400.0">400mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="budesonideDose" id="budesonideDose" v-model="budesonideDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="budesonideFreq" id="budesonideFreq" v-model="budesonideFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="ciclesonide" id="ciclesonide" v-model="ciclesonide">
+                            <label for="ciclesonide" style="width:25%">
+                                <b>Ciclesonide</b>
+                                <br><i>(Alvesco)</i>
                             </label>
-
-                            <label>
-                                Frequency:
-                                <select name="beclomethasoneFreq" id="beclomethasoneFreq" v-model="beclomethasoneFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                    <option value="qid">qid</option>
-                                </select>
+                            <span v-if="ciclesonide">
+                                <label>
+                                    Strength:
+                                    <select name="ciclesonideStrength" id="ciclesonideStrength"
+                                        v-model="ciclesonideStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="ciclesonideDose" id="ciclesonideDose" v-model="ciclesonideDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="ciclesonideFreq" id="ciclesonideFreq" v-model="ciclesonideFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="bid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input class="medication-tall" type="checkbox" name="fluticasonePropionate"
+                                id="fluticasonePropionate" v-model="fluticasonePropionate">
+                            <label for="fluticasonePropionate" style="width:25%;">
+                                <b>Fluticasone propionate</b> <i>(Advair pMDI & Diskus, Flovent MDI & Diskus, Wixela
+                                    Inhub)</i>
                             </label>
-                        </span>
+                            <span v-if="fluticasonePropionate">
+                                <label>
+                                    Strength:
+                                    <select name="fluticasonePropionateStrength" id="budesonideStrength"
+                                        v-model="fluticasonePropionateStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="250.0">250mcg</option>
+                                        <option value="500.0">500mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="fluticasonePropionateDose" id="fluticasonePropionateDose"
+                                        v-model="fluticasonePropionateDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                        <option value="5">5 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="fluticasonePropionateFreq" id="fluticasonePropionateFreq"
+                                        v-model="fluticasonePropionateFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="fluticasoneFuroate" id="fluticasoneFuroate"
+                                v-model="fluticasoneFuroate">
+                            <label for="fluticasoneFuroate" style="width:25%">
+                                <b>Fluticasone furoate</b>
+                                <br><i>(Arnuity, Breo, Trelegy Ellipta)</i>
+                            </label>
+                            <span v-if="fluticasoneFuroate">
+                                <label>
+                                    Strength:
+                                    <select name="fluticasoneFuroateStrength" id="budesonideStrength"
+                                        v-model="fluticasoneFuroateStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="fluticasoneFuroateDose" id="fluticasoneFuroateDose"
+                                        v-model="fluticasoneFuroateDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="fluticasoneFuroateFreq" id="fluticasoneFuroateFreq"
+                                        v-model="fluticasoneFuroateFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="bid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="mometasoneFuroate" id="mometasoneFuroate"
+                                v-model="mometasoneFuroate">
+                            <label for="mometasoneFuroate" style="width:25%">
+                                <b>Mometasone furoate</b>
+                                <br><i>(Zenhale, Asmanex MDI)</i>
+                            </label>
+                            <span v-if="mometasoneFuroate">
+                                <label>
+                                    Strength:
+                                    <select name="mometasoneFuroateStrength" id="budesonideStrength"
+                                        v-model="mometasoneFuroateStrength" style="width: 90px">
+                                        <option value="50.0">50mcg</option>
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                        <option value="400.0">400mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="mometasoneFuroateDose" id="mometasoneFuroateDose"
+                                        v-model="mometasoneFuroateDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="mometasoneFuroateFreq" id="mometasoneFuroateFreq"
+                                        v-model="mometasoneFuroateFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div>
+                            <label style="width:35%">
+                                <b>On a second controller for the previous year</b>
+                            </label>
+                            <label class="cursor">
+                                <input type="radio" name="secController" value="yes">
+                                Yes
+                            </label>
+                            <label class="cursor">
+                                <input type="radio" name="secController" value="no">
+                                No
+                            </label>
+                        </div>
                     </div>
-                    <hr>
-                    <div>
-                        <input type="checkbox" name="budesonide" id="budesonide" v-model="budesonide">
-                        <label for="budesonide" style="width:25%">
-                            <b>Budesonide</b>
-                        </label>
-                        <span v-if="budesonide">
-                            <label>
-                                Strength:
-                                <select name="budesonideStrength" id="budesonideStrength" v-model="budesonideStrength"
-                                    style="width: 90px">
-                                    <option value="100.0">100mcg</option>
-                                    <option value="200.0">200mcg</option>
-                                    <option value="400.0">400mcg</option>
-                                </select>
-                            </label>
-                            <label>
-                                Dose:
-                                <select name="budesonideDose" id="budesonideDose" v-model="budesonideDose"
-                                    style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                    <option value="4">4 puffs</option>
-                                </select>
-                            </label>
-                            <label>
-                                Frequency:
-                                <select name="budesonideFreq" id="budesonideFreq" v-model="budesonideFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                    <option value="qid">qid</option>
-                                </select>
-                            </label>
-                        </span>
-                    </div>
-                    <hr>
-                    <div>
-                        <input type="checkbox" name="ciclesonide" id="ciclesonide" v-model="ciclesonide">
-                        <label for="ciclesonide" style="width:25%">
-                            <b>Ciclesonide</b>
-                        </label>
-                        <span v-if="ciclesonide">
-                            <label>
-                                Strength:
-                                <select name="ciclesonideStrength" id="ciclesonideStrength"
-                                    v-model="ciclesonideStrength" style="width: 90px">
-                                    <option value="100.0">100mcg</option>
-                                    <option value="200.0">200mcg</option>
-                                </select>
-                            </label>
-                            <label>
-                                Dose:
-                                <select name="ciclesonideDose" id="ciclesonideDose" v-model="ciclesonideDose"
-                                    style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                    <option value="4">4 puffs</option>
-                                </select>
-                            </label>
-                            <!-- <label>
-                                Frequency:
-                                <select name="ciclesonideFreq" id="ciclesonideFreq" v-model="ciclesonideFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                </select>
-                            </label> -->
-                        </span>
-                    </div>
-                    <hr>
-                    <div>
-                        <input type="checkbox" name="fluticasonePropionate" id="fluticasonePropionate"
-                            v-model="fluticasonePropionate">
-                        <label for="fluticasonePropionate" style="width:25%">
-                            <b>Fluticasone propionate</b>
-                        </label>
-                        <span v-if="fluticasonePropionate">
-                            <label>
-                                Strength:
-                                <select name="fluticasonePropionateStrength" id="budesonideStrength"
-                                    v-model="fluticasonePropionateStrength" style="width: 90px">
-                                    <option value="100.0">100mcg</option>
-                                    <option value="250.0">250mcg</option>
-                                    <option value="500.0">500mcg</option>
-                                </select>
-                            </label>
-                            <label>
-                                Dose:
-                                <select name="fluticasonePropionateDose" id="fluticasonePropionateDose"
-                                    v-model="fluticasonePropionateDose" style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                    <option value="4">4 puffs</option>
-                                    <option value="5">5 puffs</option>
-                                </select>
-                            </label>
-                            <label>
-                                Frequency:
-                                <select name="fluticasonePropionateFreq" id="fluticasonePropionateFreq"
-                                    v-model="fluticasonePropionateFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                    <option value="qid">qid</option>
-                                </select>
-                            </label>
-                        </span>
-                    </div>
-                    <hr>
-                    <div>
-                        <input type="checkbox" name="fluticasoneFuroate" id="fluticasoneFuroate"
-                            v-model="fluticasoneFuroate">
-                        <label for="fluticasoneFuroate" style="width:25%">
-                            <b>Fluticasone furoate</b>
-                        </label>
-                        <span v-if="fluticasoneFuroate">
-                            <label>
-                                Strength:
-                                <select name="fluticasoneFuroateStrength" id="budesonideStrength"
-                                    v-model="fluticasoneFuroateStrength" style="width: 90px">
-                                    <option value="100.0">100mcg</option>
-                                    <option value="200.0">200mcg</option>
-                                </select>
-                            </label>
-                            <label>
-                                Dose:
-                                <select name="fluticasoneFuroateDose" id="fluticasoneFuroateDose"
-                                    v-model="fluticasoneFuroateDose" style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                </select>
-                            </label>
-                            <label>
-                                Frequency:
-                                <select name="fluticasoneFuroateFreq" id="fluticasoneFuroateFreq"
-                                    v-model="fluticasoneFuroateFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                    <option value="bid">qid</option>
-                                </select>
-                            </label>
-                        </span>
-                    </div>
-                    <hr>
-                    <div>
-                        <input type="checkbox" name="mometasoneFuroate" id="mometasoneFuroate"
-                            v-model="mometasoneFuroate">
-                        <label for="mometasoneFuroate" style="width:25%">
-                            <b>Mometasone furoate</b>
-                        </label>
-                        <span v-if="mometasoneFuroate">
-                            <label>
-                                Strength:
-                                <select name="mometasoneFuroateStrength" id="budesonideStrength"
-                                    v-model="mometasoneFuroateStrength" style="width: 90px">
-                                    <option value="50.0">50mcg</option>
-                                    <option value="100.0">100mcg</option>
-                                    <option value="200.0">200mcg</option>
-                                    <option value="400.0">400mcg</option>
-                                </select>
-                            </label>
-                            <label>
-                                Dose:
-                                <select name="mometasoneFuroateDose" id="mometasoneFuroateDose"
-                                    v-model="mometasoneFuroateDose" style="width: 90px">
-                                    <option value="1">1 puff</option>
-                                    <option value="2">2 puffs</option>
-                                    <option value="3">3 puffs</option>
-                                    <option value="4">4 puffs</option>
-                                </select>
-                            </label>
-                            <label>
-                                Frequency:
-                                <select name="mometasoneFuroateFreq" id="mometasoneFuroateFreq"
-                                    v-model="mometasoneFuroateFreq">
-                                    <option value="oid">oid</option>
-                                    <option value="bid">bid</option>
-                                    <option value="qid">qid</option>
-                                </select>
-                            </label>
-                        </span>
-
-                    </div>
-                    <hr>
-                    <div>
-                        <label style="width:35%">
-                            <b>On a second controller for the previous year</b>
-                        </label>
-                        <label class="cursor">
-                            <input type="radio" name="secController" value="yes">
-                            Yes
-                        </label>
-                        <label class="cursor">
-                            <input type="radio" name="secController" value="no">
-                            No
-                        </label>
-                    </div>
+                    <label style="width:11%; margin-bottom: 15px;">
+                        <b>Severe Asthma</b>
+                    </label>
+                    <span>-</span>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <input type="button" style="padding: 3px;" value="Calculate" />
+                    <br>
                     <hr>
                     <table style="margin:5px; width: 99%; text-align: left;">
                         <tr>
@@ -2313,6 +2366,8 @@
                 dob: document.getElementById("dob").value,
                 youngPatient: false,
                 ableSpirometry: true,
+                // warning banners
+                medicationBanner: true,
                 //is controlled indicators
                 // activityLimited: _activityLimited,
                 asthmaControlled: null,
@@ -2473,7 +2528,7 @@
             // search for index of dose
             if (restOfLine.indexOf(" OD ") != -1) {
                 freqPos = restOfLine.indexOf("OD") - 2;
-                app.budesonideFreq = "oid";
+                app.budesonideFreq = "od";
             } else if (restOfLine.indexOf(" BID ") != -1) {
                 freqPos = restOfLine.indexOf("BID") - 2;
                 app.budesonideFreq = "bid";
@@ -2511,7 +2566,7 @@
             // search for index of dose
             if (restOfLine.indexOf(" OD ") != -1) {
                 freqPos = restOfLine.indexOf("OD") - 2;
-                app.ciclesonideFreq = "oid";
+                app.ciclesonideFreq = "od";
             } else if (restOfLine.indexOf("BI") != -1) {
                 freqPos = restOfLine.indexOf("BID") - 2;
                 app.ciclesonideFreq = "bid";
@@ -2549,7 +2604,7 @@
             // search for index of dose
             if (restOfLine.indexOf(" OD ") != -1) {
                 freqPos = restOfLine.indexOf("OD") - 2;
-                app.fluticasonePropionateFreq = "oid";
+                app.fluticasonePropionateFreq = "od";
             } else if (restOfLine.indexOf("BID") != -1) {
                 freqPos = restOfLine.indexOf("BID") - 2;
                 app.fluticasonePropionateFreq = "bid";
@@ -2589,7 +2644,7 @@
             // search for index of dose
             if (restOfLine.indexOf(" OD ") != -1) {
                 freqPos = restOfLine.indexOf("OD") - 2;
-                app.fluticasoneFuroateFreq = "oid";
+                app.fluticasoneFuroateFreq = "od";
             } else if (restOfLine.indexOf(" BID ") != -1) {
                 freqPos = restOfLine.indexOf("BID") - 2;
                 app.fluticasoneFuroateFreq = "bid";
@@ -2628,7 +2683,7 @@
             // search for index of dose
             if (restOfLine.indexOf(" OD ") != -1) {
                 freqPos = restOfLine.indexOf("OD") - 2;
-                app.mometasoneFuroateFreq = "oid";
+                app.mometasoneFuroateFreq = "od";
             } else if (restOfLine.indexOf(" BID ") != -1) {
                 freqPos = restOfLine.indexOf("BID") - 2;
                 app.mometasoneFuroateFreq = "bid";
