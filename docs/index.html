@@ -696,6 +696,29 @@
                                 </label>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <b>Atopic disorder</b>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverParent"
+                                        oscarDB=e$last#allergyAtopicDisorderParent>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverSibling"
+                                        oscarDB=e$last#allergyAtopicDisorderSibling>
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="allergyHayfeverUnknown"
+                                        oscarDB=e$last#allergyAtopicDisorderUnknown>
+                                </label>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -1237,7 +1260,7 @@
                     </div>
                     <hr>
                     <div>
-                        <label style="width:35%"><b>Did your asthma symptoms worsen at at work?</b></label>
+                        <label style="width:35%"><b>Do/did your asthma symptoms worsen at at work?</b></label>
                         <input type="hidden" id="pulled-workWorsen" oscarDB=e$last#workWorsen />
                         <label>
                             <input type="radio" name="workWorsen" value="yes" v-model="workWorsen">
@@ -1796,7 +1819,7 @@
                         <label style="width:32%"><b>Daytime symptoms*</b></label>
                         <input type="textbox" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
                             onchange="calcIsControlled()">
-                        <label>Control=&#60;4</label>
+                        <label>Control=&#60;2</label>
                     </div>
                     <div>
                         <label><i>(Average number of days/week in the last 4 weeks with dyspnea, cough, wheeze,
@@ -1888,7 +1911,7 @@
                             <input type="textbox" placeholder="# of doses/week" onchange="calcIsControlled()"
                                 name="needReliever" id="needReliever">
                         </label>
-                        <label>control=&#60;4</label>
+                        <label>control=&#60;2</label>
                     </div>
                     <div>
                         <label><i>(Average number of days/week in the last 4 weeks)</i></label>
@@ -2106,7 +2129,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Yellow or red zone of action plan</b>
+                                <b>Yellow or red zone of action plan followed since last visit</b>
                             </td>
                             <td>
                                 <label><input type="radio" name="yellowOrRed"></label>
@@ -2751,15 +2774,15 @@
 
         calcIsControlled = function () {
             if (document.getElementById('activityIsLimited').checked ||
-                parseInt(document.getElementById('needReliever').value) >= 4 ||
-                parseInt(document.getElementById("daytimeSymptoms").value) >= 4 ||
+                parseInt(document.getElementById('needReliever').value) >= 2 ||
+                parseInt(document.getElementById("daytimeSymptoms").value) >= 2 ||
                 parseInt(document.getElementById("numberWorkSchoolAbsences").value) >= 1 ||
                 parseInt(document.getElementById("nighttimeSymptoms").value) >= 1 ||
                 parseInt(document.getElementById("numberExacerbations").value) >= 1) {
                 app.asthmaControlled = "No";
             } else if (document.getElementById('activityNotLimited').checked &&
-                parseInt(document.getElementById('needReliever').value) < 4 &&
-                parseInt(document.getElementById("daytimeSymptoms").value) < 4 &&
+                parseInt(document.getElementById('needReliever').value) < 2 &&
+                parseInt(document.getElementById("daytimeSymptoms").value) < 2 &&
                 document.getElementById("noWorkSchoolAbsences").checked &&
                 parseInt(document.getElementById("nighttimeSymptoms").value) < 1 &&
                 document.getElementById("noExacerbationsSinceLast").checked) {
@@ -2771,20 +2794,8 @@
         }
         calcAge(app.dob);
         calcIsControlled()
-        // });
-
-        // hideShow = function () {
-        //     debugger
-        //     if (app.asdf) {
-        //         app.asdf = false
-        //     } else {
-        //         app.asdf = true
-        //     }
-        // }
 
     </script>
-
-
 </body>
 
 </html>
