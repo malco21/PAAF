@@ -83,8 +83,6 @@
             align-items: center;
         }
 
-        .medication-tall {}
-
         table,
         th,
         td {
@@ -1300,7 +1298,7 @@
                     </span>
                 </div>
                 <div id="medicationContent">
-                    <div v-show="false" style="display:block; height:110px;">
+                    <!-- <div v-show="false" style="display:block; height:110px;">
                         <div style="width:49%; float: left;">
                             <div>
                                 <label><i>Current medications in Oscar (for reference only)</i></label>
@@ -1316,7 +1314,7 @@
                                 style="width:98%; margin-left:1%; height: 100px; cursor: default" id="oscarGenericDrugs"
                                 oscarDB=druglist_generic></textarea>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="accordion-banner" v-show="medicationBanner">
                         Patient medications were imported from Oscar. Please review and update where necessary.
                         <span class="close-btn" v-on:click="medicationBanner = false">&#10006;</span>
@@ -1324,10 +1322,8 @@
                     <label>
                         <b>Green Zone Controllers</b>
                     </label><br>
-                    <label><i>The following medications are required to determine asthma severity. <br> Do not include
-                            yellow
-                            or red zone medications. For combination drugs, please enter
-                            the strength of the relevant drug. </i></label>
+                    <label><i>The following medications are required to determine asthma severity. <br>
+                            Do not include yellow or red zone medications. </i></label>
                     <!-- <textarea readonly style="width:98%; margin-left:1%" name="oscarMeds" oscarDB=current_Rx></textarea> -->
                     <!-- <span onclick="parseMeds()">parse meds</span> -->
                     <!-- <div>
@@ -1335,24 +1331,23 @@
                     </div> -->
                     <div class="med-calc-section">
                         <div class="flex-center">
-                            <input type="checkbox" id="beclomethasone" name="beclomethasone" v-model="beclomethasone">
-                            <label for="beclomethasone" style="width:25%">
-                                <b>Beclomethasone dipropionate HFA</b>
-                                <i>(QVAR pMDI)</i>
+                            <input type="checkbox" id="qvar" name="qvar" v-model="qvar">
+                            <label for="qvar" style="width:25%">
+                                <b>QVAR</b><br>
+                                <i>Beclomethasone diproprioate HFA</i>
                             </label>
-                            <span v-if="beclomethasone">
+                            <span v-if="qvar">
                                 <label>
                                     Strength:
-                                    <select name="beclomethasoneStrength" id="beclomethasoneStrength"
-                                        v-model="beclomethasoneStrength" style="width: 90px">
-                                        <option value="50.0">50mcg</option>
-                                        <option value="100.0">100mcg</option>
+                                    <select name="qvarStrength" id="qvarStrength" v-model="qvarStrength"
+                                        style="width: 90px">
+                                        <option value="50">50mcg</option>
+                                        <option value="100">100mcg</option>
                                     </select>
                                 </label>
                                 <label>
                                     Dose:
-                                    <select name="beclomethasoneDose" id="beclomethasoneDose"
-                                        v-model="beclomethasoneDose" style="width: 90px">
+                                    <select name="qvarDose" id="qvarDose" v-model="qvarDose" style="width: 90px">
                                         <option value="1">1 puff</option>
                                         <option value="2">2 puffs</option>
                                         <option value="3">3 puffs</option>
@@ -1362,27 +1357,26 @@
 
                                 <label>
                                     Frequency:
-                                    <select name="beclomethasoneFreq" id="beclomethasoneFreq"
-                                        v-model="beclomethasoneFreq">
+                                    <select name="qvarFreq" id="qvarFreq" v-model="qvarFreq">
                                         <option value="od">od</option>
                                         <option value="bid">bid</option>
-                                        <option value="qid">qid</option>
                                     </select>
                                 </label>
                             </span>
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="budesonide" id="budesonide" v-model="budesonide">
-                            <label for="budesonide" style="width:25%">
-                                <b>Budesonide</b><br>
-                                <i>(Pulmicort, Symbicort)</i>
+                            <input type="checkbox" name="pulmicortTurbuhaler" id="pulmicortTurbuhaler"
+                                v-model="pulmicortTurbuhaler">
+                            <label for="pulmicortTurbuhaler" style="width:25%">
+                                <b>Pulmicort Turbuhaler</b><br>
+                                <i>Budesonide</i>
                             </label>
-                            <span v-if="budesonide">
+                            <span v-if="pulmicortTurbuhaler">
                                 <label>
                                     Strength:
-                                    <select name="budesonideStrength" id="budesonideStrength"
-                                        v-model="budesonideStrength" style="width: 90px">
+                                    <select name="pulmicortTurbuhalerStrength" id="pulmicortTurbuhalerStrength"
+                                        v-model="pulmicortTurbuhalerStrength" style="width: 90px">
                                         <option value="100.0">100mcg</option>
                                         <option value="200.0">200mcg</option>
                                         <option value="400.0">400mcg</option>
@@ -1390,82 +1384,8 @@
                                 </label>
                                 <label>
                                     Dose:
-                                    <select name="budesonideDose" id="budesonideDose" v-model="budesonideDose"
-                                        style="width: 90px">
-                                        <option value="1">1 puff</option>
-                                        <option value="2">2 puffs</option>
-                                        <option value="3">3 puffs</option>
-                                        <option value="4">4 puffs</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Frequency:
-                                    <select name="budesonideFreq" id="budesonideFreq" v-model="budesonideFreq">
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
-                                        <option value="qid">qid</option>
-                                    </select>
-                                </label>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="flex-center">
-                            <input type="checkbox" name="ciclesonide" id="ciclesonide" v-model="ciclesonide">
-                            <label for="ciclesonide" style="width:25%">
-                                <b>Ciclesonide</b>
-                                <br><i>(Alvesco)</i>
-                            </label>
-                            <span v-if="ciclesonide">
-                                <label>
-                                    Strength:
-                                    <select name="ciclesonideStrength" id="ciclesonideStrength"
-                                        v-model="ciclesonideStrength" style="width: 90px">
-                                        <option value="100.0">100mcg</option>
-                                        <option value="200.0">200mcg</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Dose:
-                                    <select name="ciclesonideDose" id="ciclesonideDose" v-model="ciclesonideDose"
-                                        style="width: 90px">
-                                        <option value="1">1 puff</option>
-                                        <option value="2">2 puffs</option>
-                                        <option value="3">3 puffs</option>
-                                        <option value="4">4 puffs</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Frequency:
-                                    <select name="ciclesonideFreq" id="ciclesonideFreq" v-model="ciclesonideFreq">
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
-                                        <option value="bid">qid</option>
-                                    </select>
-                                </label>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="flex-center">
-                            <input class="medication-tall" type="checkbox" name="fluticasonePropionate"
-                                id="fluticasonePropionate" v-model="fluticasonePropionate">
-                            <label for="fluticasonePropionate" style="width:25%;">
-                                <b>Fluticasone propionate</b> <i>(Advair pMDI & Diskus, Flovent MDI & Diskus, Wixela
-                                    Inhub)</i>
-                            </label>
-                            <span v-if="fluticasonePropionate">
-                                <label>
-                                    Strength:
-                                    <select name="fluticasonePropionateStrength" id="budesonideStrength"
-                                        v-model="fluticasonePropionateStrength" style="width: 90px">
-                                        <option value="100.0">100mcg</option>
-                                        <option value="250.0">250mcg</option>
-                                        <option value="500.0">500mcg</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Dose:
-                                    <select name="fluticasonePropionateDose" id="fluticasonePropionateDose"
-                                        v-model="fluticasonePropionateDose" style="width: 90px">
+                                    <select name="pulmicortTurbuhalerDose" id="pulmicortTurbuhalerDose"
+                                        v-model="pulmicortTurbuhalerDose" style="width: 90px">
                                         <option value="1">1 puff</option>
                                         <option value="2">2 puffs</option>
                                         <option value="3">3 puffs</option>
@@ -1475,75 +1395,35 @@
                                 </label>
                                 <label>
                                     Frequency:
-                                    <select name="fluticasonePropionateFreq" id="fluticasonePropionateFreq"
-                                        v-model="fluticasonePropionateFreq">
+                                    <select name="pulmicortTurbuhalerFreq" id="pulmicortTurbuhalerFreq"
+                                        v-model="pulmicortTurbuhalerFreq">
                                         <option value="od">od</option>
                                         <option value="bid">bid</option>
-                                        <option value="qid">qid</option>
                                     </select>
                                 </label>
                             </span>
                         </div>
                         <hr>
                         <div class="flex-center">
-                            <input type="checkbox" name="fluticasoneFuroate" id="fluticasoneFuroate"
-                                v-model="fluticasoneFuroate">
-                            <label for="fluticasoneFuroate" style="width:25%">
-                                <b>Fluticasone furoate</b>
-                                <br><i>(Arnuity, Breo, Trelegy Ellipta)</i>
+                            <input type="checkbox" name="symbicortTurbuhaler" id="symbicortTurbuhaler"
+                                v-model="symbicortTurbuhaler">
+                            <label for="symbicortTurbuhaler" style="width:25%">
+                                <b>Symbicort Turbuhaler</b><br>
+                                <i>Budesonide/formoterol</i>
                             </label>
-                            <span v-if="fluticasoneFuroate">
+                            <span v-if="symbicortTurbuhaler">
                                 <label>
                                     Strength:
-                                    <select name="fluticasoneFuroateStrength" id="budesonideStrength"
-                                        v-model="fluticasoneFuroateStrength" style="width: 90px">
-                                        <option value="100.0">100mcg</option>
-                                        <option value="200.0">200mcg</option>
+                                    <select name="symbicortTurbuhalerStrength" id="symbicortTurbuhalerStrength"
+                                        v-model="symbicortTurbuhalerStrength" style="width: 90px">
+                                        <option value="100.0">100/6mcg</option>
+                                        <option value="200.0">200/6mcg</option>
                                     </select>
                                 </label>
                                 <label>
                                     Dose:
-                                    <select name="fluticasoneFuroateDose" id="fluticasoneFuroateDose"
-                                        v-model="fluticasoneFuroateDose" style="width: 90px">
-                                        <option value="1">1 puff</option>
-                                        <option value="2">2 puffs</option>
-                                        <option value="3">3 puffs</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Frequency:
-                                    <select name="fluticasoneFuroateFreq" id="fluticasoneFuroateFreq"
-                                        v-model="fluticasoneFuroateFreq">
-                                        <option value="od">od</option>
-                                        <option value="bid">bid</option>
-                                        <option value="bid">qid</option>
-                                    </select>
-                                </label>
-                            </span>
-                        </div>
-                        <hr>
-                        <div class="flex-center">
-                            <input type="checkbox" name="mometasoneFuroate" id="mometasoneFuroate"
-                                v-model="mometasoneFuroate">
-                            <label for="mometasoneFuroate" style="width:25%">
-                                <b>Mometasone furoate</b>
-                                <br><i>(Zenhale, Asmanex MDI)</i>
-                            </label>
-                            <span v-if="mometasoneFuroate">
-                                <label>
-                                    Strength:
-                                    <select name="mometasoneFuroateStrength" id="budesonideStrength"
-                                        v-model="mometasoneFuroateStrength" style="width: 90px">
-                                        <option value="50.0">50mcg</option>
-                                        <option value="100.0">100mcg</option>
-                                        <option value="200.0">200mcg</option>
-                                        <option value="400.0">400mcg</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Dose:
-                                    <select name="mometasoneFuroateDose" id="mometasoneFuroateDose"
-                                        v-model="mometasoneFuroateDose" style="width: 90px">
+                                    <select name="symbicortTurbuhalerDose" id="symbicortTurbuhalerDose"
+                                        v-model="symbicortTurbuhalerDose" style="width: 90px">
                                         <option value="1">1 puff</option>
                                         <option value="2">2 puffs</option>
                                         <option value="3">3 puffs</option>
@@ -1552,11 +1432,392 @@
                                 </label>
                                 <label>
                                     Frequency:
-                                    <select name="mometasoneFuroateFreq" id="mometasoneFuroateFreq"
-                                        v-model="mometasoneFuroateFreq">
+                                    <select name="symbicortTurbuhalerFreq" id="symbicortTurbuhalerFreq"
+                                        v-model="symbicortTurbuhalerFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="alvesco" id="alvesco" v-model="alvesco">
+                            <label for="alvesco" style="width:25%">
+                                <b>Alvesco</b>
+                                <br><i>Ciclesonide</i>
+                            </label>
+                            <span v-if="alvesco">
+                                <label>
+                                    Strength:
+                                    <select name="alvescoStrength" id="alvescoStrength" v-model="alvescoStrength"
+                                        style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="alvescoDose" id="alvescoDose" v-model="alvescoDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="alvescoFreq" id="alvescoFreq" v-model="alvescoFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="floventMDI" id="floventMDI" v-model="floventMDI">
+                            <label for="floventMDI" style="width:25%;">
+                                <b>Flovent MDI and spacer</b><br>
+                                <i>Fluticasone propionate</i>
+                            </label>
+                            <span v-if="floventMDI">
+                                <label>
+                                    Strength:
+                                    <select name="floventMDIStrength" id="floventMDIStrength"
+                                        v-model="floventMDIStrength" style="width: 90px">
+                                        <option value="50.0">50mcg</option>
+                                        <option value="125.0">125mcg</option>
+                                        <option value="250.0">250mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="floventMDIDose" id="floventMDIDose" v-model="floventMDIDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="floventMDIFreq" id="floventMDIFreq" v-model="floventMDIFreq">
                                         <option value="od">od</option>
                                         <option value="bid">bid</option>
                                         <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="floventDiskus" id="floventDiskus" v-model="floventDiskus">
+                            <label for="floventDiskus" style="width:25%;">
+                                <b>Flovent Diskus</b><br>
+                                <i>Fluticasone propionate</i>
+                            </label>
+                            <span v-if="floventDiskus">
+                                <label>
+                                    Strength:
+                                    <select name="floventDiskusStrength" id="floventDiskusStrength"
+                                        v-model="floventDiskusStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="250.0">250mcg</option>
+                                        <option value="500.0">500mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="floventDiskusDose" id="floventDiskusDose" v-model="floventDiskusDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                        <option value="4">4 puffs</option>
+                                        <option value="5">5 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="floventDiskusFreq" id="floventDiskusFreq" v-model="floventDiskusFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="advairDiskus" id="advairDiskus" v-model="advairDiskus">
+                            <label for="advairDiskus" style="width:25%">
+                                <b>Advair Diskus</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="advairDiskus">
+                                <label>
+                                    Strength:
+                                    <select name="advairDiskusStrength" id="advairDiskusStrength"
+                                        v-model="advairDiskusStrength" style="width: 90px">
+                                        <option value="100.0">100/50mcg</option>
+                                        <option value="250.0">250/50mcg</option>
+                                        <option value="500.0">500/50mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="advairDiskusDose" id="advairDiskusDose" v-model="advairDiskusDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="advairDiskusFreq" id="advairDiskusFreq" v-model="advairDiskusFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="advairPMDI" id="advairPMDI" v-model="advairPMDI">
+                            <label for="advairPMDI" style="width:25%">
+                                <b>Advair pMDI</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="advairPMDI">
+                                <label>
+                                    Strength:
+                                    <select name="advairPMDIStrength" id="advairPMDIStrength"
+                                        v-model="advairPMDIStrength" style="width: 90px">
+                                        <option value="100.0">125/25mcg</option>
+                                        <option value="250.0">250/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="advairPMDIDose" id="advairPMDIDose" v-model="advairPMDIDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="advairPMDIFreq" id="advairPMDIFreq" v-model="advairPMDIFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="wixelaInhub" id="wixelaInhub" v-model="wixelaInhub">
+                            <label for="wixelaInhub" style="width:25%">
+                                <b>Wixela Inhub</b>
+                                <br><i>Fluticasone/salmeterol</i>
+                            </label>
+                            <span v-if="wixelaInhub">
+                                <label>
+                                    Strength:
+                                    <select name="wixelaInhubStrength" id="wixelaInhubStrength"
+                                        v-model="wixelaInhubStrength" style="width: 90px">
+                                        <option value="100.0">100/50mcg</option>
+                                        <option value="250.0">250/50mcg</option>
+                                        <option value="500.0">500/50mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="wixelaInhubDose" id="wixelaInhubDose" v-model="wixelaInhubDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="wixelaInhubFreq" id="wixelaInhubFreq" v-model="wixelaInhubFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="arnuityEllipta" id="arnuityEllipta" v-model="arnuityEllipta">
+                            <label for="arnuityEllipta" style="width:25%">
+                                <b>Arnuity Ellipta</b>
+                                <br><i>Fluticasone furoate</i>
+                            </label>
+                            <span v-if="arnuityEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="arnuityElliptaStrength" id="arnuityElliptaStrength"
+                                        v-model="arnuityElliptaStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="arnuityElliptaDose" id="arnuityElliptaDose"
+                                        v-model="arnuityElliptaDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puffs</option>
+                                        <option value="3">3 puffs</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="arnuityElliptaFreq" id="arnuityElliptaFreq"
+                                        v-model="arnuityElliptaFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                        <option value="bid">tid</option>
+                                        <option value="qid">qid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="breoEllipta" id="breoEllipta" v-model="breoEllipta">
+                            <label for="breoEllipta" style="width:25%">
+                                <b>Breo Ellipta</b>
+                                <br><i>Fluticasone/vilanterol Ellipta</i>
+                            </label>
+                            <span v-if="breoEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="breoElliptaStrength" id="breoElliptaStrength"
+                                        v-model="breoElliptaStrength" style="width: 90px">
+                                        <option value="100.0">100/25mcg</option>
+                                        <option value="200.0">200/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="breoElliptaDose" id="breoElliptaDose" v-model="breoElliptaDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="breoElliptaFreq" id="breoElliptaFreq" v-model="breoElliptaFreq">
+                                        <option value="od">od</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="trelegyEllipta" id="trelegyEllipta" v-model="trelegyEllipta">
+                            <label for="trelegyEllipta" style="width:25%">
+                                <b>Trelegy Ellipta </b>
+                                <br><i>Fluticasone/vilanterol/umeclidinium</i>
+                            </label>
+                            <span v-if="trelegyEllipta">
+                                <label>
+                                    Strength:
+                                    <select name="trelegyElliptaStrength" id="trelegyElliptaStrength"
+                                        v-model="trelegyElliptaStrength" style="width: 125px">
+                                        <option value="100.0">100/62.5/25mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="trelegyElliptaDose" id="trelegyElliptaDose"
+                                        v-model="trelegyElliptaDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="trelegyElliptaFreq" id="trelegyElliptaFreq"
+                                        v-model="trelegyElliptaFreq">
+                                        <option value="od">od</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="asmanexTwisthaler" id="asmanexTwisthaler"
+                                v-model="asmanexTwisthaler">
+                            <label for="asmanexTwisthaler" style="width:25%">
+                                <b>Asmanex Twisthaler </b>
+                                <br><i>Mometasone furoate</i>
+                            </label>
+                            <span v-if="asmanexTwisthaler">
+                                <label>
+                                    Strength:
+                                    <select name="asmanexTwisthalerStrength" id="asmanexTwisthalerStrength"
+                                        v-model="asmanexTwisthalerStrength" style="width: 90px">
+                                        <option value="100.0">100mcg</option>
+                                        <option value="200.0">200mcg</option>
+                                        <option value="400.0">400mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="asmanexTwisthalerDose" id="asmanexTwisthalerDose"
+                                        v-model="asmanexTwisthalerDose" style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                        <option value="3">3 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="asmanexTwisthalerFreq" id="asmanexTwisthalerFreq"
+                                        v-model="asmanexTwisthalerElliptaFreq">
+                                        <option value="od">od</option>
+                                        <option value="bid">bid</option>
+                                    </select>
+                                </label>
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="flex-center">
+                            <input type="checkbox" name="zenhaleMDI" id="zenhaleMDI" v-model="zenhaleMDI">
+                            <label for="zenhaleMDI" style="width:25%">
+                                <b>Zenhale MDI</b>
+                                <br><i>Mometasone/fomoterol</i>
+                            </label>
+                            <span v-if="zenhaleMDI">
+                                <label>
+                                    Strength:
+                                    <select name="zenhaleMDIStrength" id="zenhaleMDIStrength"
+                                        v-model="zenhaleMDIStrength" style="width: 90px">
+                                        <option value="50.0">50/5mcg</option>
+                                        <option value="100.0">100/5mcg</option>
+                                        <option value="200.0">200/5mcg</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Dose:
+                                    <select name="zenhaleMDIDose" id="zenhaleMDIDose" v-model="zenhaleMDIDose"
+                                        style="width: 90px">
+                                        <option value="1">1 puff</option>
+                                        <option value="2">2 puff</option>
+                                        <option value="3">3 puff</option>
+                                        <option value="4">4 puff</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Frequency:
+                                    <select name="zenhaleMDIFreq" id="zenhaleMDIFreq" v-model="zenhaleElliptaFreq">
+                                        <option value="od">bid</option>
                                     </select>
                                 </label>
                             </span>
@@ -2402,76 +2663,171 @@
                 workWorsen: document.getElementById("pulled-workWorsen").value,
                 completeWrasql: document.getElementById("pulled-completeWrasql").value,
                 // medications
-                beclomethasone: false,
-                beclomethasoneStrength: "",
-                beclomethasoneDose: "",
-                beclomethasoneFreq: "",
-                budesonide: false,
-                budesonideStrength: "",
-                budesonideDose: "",
-                budesonideFreq: "",
-                ciclesonide: false,
-                ciclesonideStrength: "",
-                ciclesonideDose: "",
-                ciclesonideFreq: "",
-                fluticasonePropionate: false,
-                fluticasonePropionateStrength: "",
-                fluticasonePropionateDose: "",
-                fluticasonePropionateFreq: "",
-                fluticasoneFuroate: false,
-                fluticasoneFuroateStrength: "",
-                fluticasoneFuroateDose: "",
-                fluticasoneFuroateFreq: "",
-                mometasoneFuroate: false,
-                mometasoneFuroateStrength: "",
-                mometasoneFuroateFreq: "",
-                mometasoneFuroateDose: ""
+                qvar: false,
+                qvarStrength: "",
+                qvarDose: "",
+                qvarFreq: "",
+
+                pulmicortTurbuhaler: false,
+                pulmicortTurbuhalerStrength: "",
+                pulmicortTurbuhalerDose: "",
+                pulmicortTurbuhalerFreq: "",
+
+                symbicortTurbuhaler: false,
+                symbicortTurbuhalerStrength: "",
+                symbicortTurbuhalerDose: "",
+                symbicortTurbuhalerFreq: "",
+
+                alvesco: false,
+                alvescoStrength: "",
+                alvescoDose: "",
+                alvescoFreq: "",
+
+                floventMDI: false,
+                floventMDIStrength: "",
+                floventMDIDose: "",
+                floventMDIFreq: "",
+
+                floventDiskus: false,
+                floventDiskusStrength: "",
+                floventDiskusDose: "",
+                floventDiskusFreq: "",
+
+                advairDiskus: false,
+                advairDiskusStrength: "",
+                advairDiskusDose: "",
+                advairDiskusFreq: "",
+                advairPMDI: false,
+                advairPMDIStrength: "",
+                advairPMDIDose: "",
+                advairPMDIFreq: "",
+
+                wixelaInhub: false,
+                wixelaInhubStrength: "",
+                wixelaInhubDose: "",
+                wixelaInhubFreq: "",
+                arnuityEllipta: false,
+                arnuityElliptaStrength: "",
+                arnuityElliptaFreq: "",
+                arnuityElliptaDose: "",
+                breoEllipta: false,
+                breoElliptaStrength: "",
+                breoElliptaFreq: "",
+                breoElliptaDose: "",
+                trelegyEllipta: false,
+                trelegyElliptaStrength: "",
+                trelegyElliptaFreq: "",
+                trelegyElliptaDose: "",
+                asmanexTwisthaler: false,
+                asmanexTwisthalerStrength: "",
+                asmanexTwisthalerFreq: "",
+                asmanexTwisthalerDose: "",
+                zenhaleMDI: false,
+                zenhaleMDIStrength: "",
+                zenhaleMDIFreq: "",
+                zenhaleMDIDose: ""
             },
             watch: {
                 // whenever question changes, this function will run
                 dob: function (newDob) {
                     calcAge(newDob)
                 },
-                beclomethasone: function (v) {
+                qvar: function (v) {
                     if (!v) {
-                        app.beclomethasoneStrength = "";
-                        app.beclomethasoneDose = "";
-                        app.beclomethasoneFreq = "";
+                        app.qvarStrength = "";
+                        app.qvarDose = "";
+                        app.qvarFreq = "";
                     }
                 },
-                budesonide: function (v) {
+                pulmicortTurbuhaler: function (v) {
                     if (!v) {
                         app.budesonideStrength = "";
                         app.budesonideDose = "";
                         app.budesonideFreq = "";
                     }
                 },
-                ciclesonide: function (v) {
+                symbicortTurbuhaler: function (v) {
                     if (!v) {
-                        app.ciclesonideStrength = "";
-                        app.ciclesonideDose = "";
-                        app.ciclesonideFreq = "";
+                        app.budesonideStrength = "";
+                        app.budesonideDose = "";
+                        app.budesonideFreq = "";
                     }
                 },
-                fluticasonePropionate: function (v) {
+                alvesco: function (v) {
                     if (!v) {
-                        app.fluticasonePropionateStrength = "";
-                        app.fluticasonePropionateDose = "";
-                        app.fluticasonePropionateFreq = "";
+                        app.alvescoStrength = "";
+                        app.alvescoDose = "";
+                        app.alvescoFreq = "";
                     }
                 },
-                fluticasoneFuroate: function (v) {
+                floventMDI: function (v) {
                     if (!v) {
-                        app.fluticasoneFuroateStrength = "";
-                        app.fluticasoneFuroateDose = "";
-                        app.fluticasoneFuroateFreq = "";
+                        app.floventMDIStrength = "";
+                        app.floventMDIDose = "";
+                        app.floventMDIFreq = "";
                     }
                 },
-                mometasoneFuroate: function (v) {
+                floventDiskus: function (v) {
                     if (!v) {
-                        app.mometasoneFuroateStrength = "";
-                        app.mometasoneFuroateFreq = "";
-                        app.mometasoneFuroateDose = "";
+                        app.floventDiskusStrength = "";
+                        app.floventDiskusDose = "";
+                        app.floventDiskusFreq = "";
+                    }
+                },
+                advairDiskus: function (v) {
+                    if (!v) {
+                        app.advairDiskusStrength = "";
+                        app.advairDiskusDose = "";
+                        app.advairDiskusFreq = "";
+                    }
+                },
+                advairPMDI: function (v) {
+                    if (!v) {
+                        app.advairPMDIStrength = "";
+                        app.advairPMDIDose = "";
+                        app.advairPMDIFreq = "";
+                    }
+                },
+                wixelaInhub: function (v) {
+                    if (!v) {
+                        app.wixelaInhubStrength = "";
+                        app.wixelaInhubDose = "";
+                        app.wixelaInhubFreq = "";
+                    }
+                },
+                arnuityEllipta: function (v) {
+                    if (!v) {
+                        app.arnuityElliptaStrength = "";
+                        app.arnuityElliptaFreq = "";
+                        app.arnuityElliptaDose = "";
+                    }
+                },
+                breoEllipta: function (v) {
+                    if (!v) {
+                        app.breoElliptaStrength = "";
+                        app.breoElliptaFreq = "";
+                        app.breoElliptaDose = "";
+                    }
+                },
+                trelegyEllipta: function (v) {
+                    if (!v) {
+                        app.trelegyElliptaStrength = "";
+                        app.trelegyElliptaFreq = "";
+                        app.trelegyElliptaDose = "";
+                    }
+                },
+                asmanexTwisthaler: function (v) {
+                    if (!v) {
+                        app.asmanexTwisthalerStrength = "";
+                        app.asmanexTwisthalerFreq = "";
+                        app.asmanexTwisthalerDose = "";
+                    }
+                },
+                zenhaleMDI: function (v) {
+                    if (!v) {
+                        app.zenhaleMDIStrength = "";
+                        app.zenhaleMDIFreq = "";
+                        app.zenhaleMDIDose = "";
                     }
                 },
                 // ableSpirometry: function (newAbleSpirometry) {
@@ -2484,238 +2840,6 @@
         });
 
         var drugList = document.getElementById("oscarGenericDrugs").value.toUpperCase();;
-
-
-        // Beclomethasone dipropionate HFA
-        if (drugList.indexOf("BECLOMETHASONE DIPROPIONATE") !== -1) {
-            app.beclomethasone = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("BECLOMETHASONE DIPROPIONATE") + 28;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine);
-            } else {
-                restOfLine = drugList.slice(drugEndPosition);
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.beclomethasoneStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.beclomethasoneFreq = "oid";
-            } else if (restOfLine.indexOf("BID") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-            } else if (restOfLine.indexOf("QID") != -1) {
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.beclomethasoneDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
-
-        // Budesonide
-        if (drugList.indexOf("BUDESONIDE") !== -1) {
-            app.budesonide = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("BUDESONIDE") + 11;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine);
-            } else {
-                restOfLine = drugList.slice(drugEndPosition);
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.budesonideStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.budesonideFreq = "od";
-            } else if (restOfLine.indexOf(" BID ") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-                app.budesonideFreq = "bid";
-            } else if (restOfLine.indexOf("QID") != -1) {
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.budesonideDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
-
-        // CICLESONIDE
-        if (drugList.indexOf("CICLESONIDE") !== -1) {
-            app.ciclesonide = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("CICLESONIDE") + 12;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine);
-            } else {
-                restOfLine = drugList.slice(drugEndPosition);
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.ciclesonideStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.ciclesonideFreq = "od";
-            } else if (restOfLine.indexOf("BI") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-                app.ciclesonideFreq = "bid";
-            } else if (restOfLine.indexOf("QID") != -1) {
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.ciclesonideDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
-
-        // FLUTICASONE PROPIONATE
-        if (drugList.indexOf("FLUTICASONE PROPIONATE") !== -1) {
-            app.fluticasonePropionate = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("FLUTICASONE PROPIONATE") + 23;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
-            } else {
-                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.fluticasonePropionateStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.fluticasonePropionateFreq = "od";
-            } else if (restOfLine.indexOf("BID") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-                app.fluticasonePropionateFreq = "bid";
-            } else if (restOfLine.indexOf(" QID ") != -1) {
-                app.fluticasonePropionateFreq = "qid";
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.fluticasonePropionateDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
-
-
-        // FLUTICASONE PROPIONATE
-        if (drugList.indexOf("FLUTICASONE FUROATE") !== -1) {
-            app.fluticasoneFuroate = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("FLUTICASONE FUROATE") + 20;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
-            } else {
-                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.fluticasoneFuroateStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.fluticasoneFuroateFreq = "od";
-            } else if (restOfLine.indexOf(" BID ") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-                app.fluticasoneFuroateFreq = "bid";
-            } else if (restOfLine.indexOf(" QID ") != -1) {
-                app.fluticasoneFuroateFreq = "qid";
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.fluticasoneFuroateDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
-
-        // Mometasone furoate
-        if (drugList.indexOf("MOMETASONE FUROATE") !== -1) {
-            app.mometasoneFuroate = true;
-            // find index of end of drug name + 1 space
-            let drugEndPosition = drugList.indexOf("MOMETASONE FUROATE") + 19;
-
-            // grab the rest of the line
-            let endOfLine = drugList.indexOf("\n", drugEndPosition);
-            var restOfLine = "";
-            if (endOfLine != 1) {
-                restOfLine = drugList.slice(drugEndPosition, endOfLine).toUpperCase();
-            } else {
-                restOfLine = drugList.slice(drugEndPosition).toUpperCase();
-            }
-            let strengthPos = restOfLine.indexOf("MCG");
-            if (restOfLine.slice(0, strengthPos) != -1) {
-                app.mometasoneFuroateStrength = restOfLine.slice(0, strengthPos);
-            }
-
-            let freqPos = "-1";
-            // search for index of dose
-            if (restOfLine.indexOf(" OD ") != -1) {
-                freqPos = restOfLine.indexOf("OD") - 2;
-                app.mometasoneFuroateFreq = "od";
-            } else if (restOfLine.indexOf(" BID ") != -1) {
-                freqPos = restOfLine.indexOf("BID") - 2;
-                app.mometasoneFuroateFreq = "bid";
-            } else if (restOfLine.indexOf(" QID ") != -1) {
-                app.mometasoneFuroateFreq = "qid";
-                freqPos = restOfLine.indexOf("QID") - 2;
-            }
-
-            // find frequency
-            if (freqPos != "-1") {
-                app.mometasoneFuroateDose = restOfLine.slice(freqPos, freqPos + 1);
-            };
-        }
-
 
         let _checkboxList = document.querySelectorAll("input[type='checkbox']");
 
