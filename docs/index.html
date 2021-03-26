@@ -76,8 +76,6 @@
             width: 50%;
         }
 
-        .medication-normal {}
-
         .flex-center {
             display: flex;
             align-items: center;
@@ -1291,7 +1289,7 @@
                     <span>
                         Medications
                     </span>
-                    <span class="text-align-right right" v-show="medication-banner">
+                    <span class="text-align-right right">
                         <input type="checkbox" id="medicationNA"
                             onclick="toggleSection('medicationNA', 'medicationContent')">
                         N/A
@@ -2646,7 +2644,7 @@
                 youngPatient: false,
                 ableSpirometry: true,
                 // warning banners
-                medicationBanner: true,
+                // medicationBanner: true,
                 //is controlled indicators
                 // activityLimited: _activityLimited,
                 asthmaControlled: null,
@@ -2667,32 +2665,26 @@
                 qvarStrength: "",
                 qvarDose: "",
                 qvarFreq: "",
-
                 pulmicortTurbuhaler: false,
                 pulmicortTurbuhalerStrength: "",
                 pulmicortTurbuhalerDose: "",
                 pulmicortTurbuhalerFreq: "",
-
                 symbicortTurbuhaler: false,
                 symbicortTurbuhalerStrength: "",
                 symbicortTurbuhalerDose: "",
                 symbicortTurbuhalerFreq: "",
-
                 alvesco: false,
                 alvescoStrength: "",
                 alvescoDose: "",
                 alvescoFreq: "",
-
                 floventMDI: false,
                 floventMDIStrength: "",
                 floventMDIDose: "",
                 floventMDIFreq: "",
-
                 floventDiskus: false,
                 floventDiskusStrength: "",
                 floventDiskusDose: "",
                 floventDiskusFreq: "",
-
                 advairDiskus: false,
                 advairDiskusStrength: "",
                 advairDiskusDose: "",
@@ -2701,7 +2693,6 @@
                 advairPMDIStrength: "",
                 advairPMDIDose: "",
                 advairPMDIFreq: "",
-
                 wixelaInhub: false,
                 wixelaInhubStrength: "",
                 wixelaInhubDose: "",
@@ -2829,17 +2820,17 @@
                         app.zenhaleMDIFreq = "";
                         app.zenhaleMDIDose = "";
                     }
-                },
+                }
                 // ableSpirometry: function (newAbleSpirometry) {
                 //     if (newAbleSpirometry) {
                 //         youngPatient = fals
                 //     }
                 //     calcAge(newDob)
                 // },
-            },
+            }
         });
 
-        var drugList = document.getElementById("oscarGenericDrugs").value.toUpperCase();;
+        // var drugList = document.getElementById("oscarGenericDrugs").value.toUpperCase();;
 
         let _checkboxList = document.querySelectorAll("input[type='checkbox']");
 
