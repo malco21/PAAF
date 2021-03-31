@@ -79,6 +79,7 @@
         .flex-center {
             display: flex;
             align-items: center;
+            justify-content: flex-start;
         }
 
         table,
@@ -1821,19 +1822,252 @@
                             </span>
                         </div>
                         <hr>
-                        <div>
-                            <label style="width:35%">
-                                <b>On a second controller for the previous year</b>
-                            </label>
-                            <label class="cursor">
-                                <input type="radio" name="secController" value="yes">
-                                Yes
-                            </label>
-                            <label class="cursor">
-                                <input type="radio" name="secController" value="no">
-                                No
-                            </label>
-                        </div>
+                        <label><b>Additional Asthma Controllers</b></label>
+                        <table style="margin:5px; width: 99%;">
+                            <tr style="background: #f1f1f1;">
+                                <th style="width:16.6%">LABA</th>
+                                <th style="width:16.6%">LAMA</th>
+                                <th style="width:16.6%">LABA/LAMA</th>
+                                <th style="width:16.6%">LTRA</th>
+                                <th style="width:16.6%">Biologics</th>
+                                <th style="width:16.6%">Other</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="ForadilAerolizer" id="ForadilAerolizer">
+                                        <label for="ForadilAerolizer">
+                                            <b>Foradil Aerolizer</b>
+                                            <br><i>Formoterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SpirivaHandihaler" id="SpirivaHandihaler">
+                                        <label for="SpirivaHandihaler" style="width:100%">
+                                            <b>Spiriva Handihaler</b>
+                                            <br><i>Tiotropium bromide</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="UltibroBreezhaler" id="UltibroBreezhaler">
+                                        <label for="UltibroBreezhaler" style="width:100%">
+                                            <b>Ultibro Breezhaler</b>
+                                            <br><i>Indacaterol/ glycopyrronium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Accolate" id="Accolate">
+                                        <label for="Accolate" style="width:100%">
+                                            <b>Accolate</b>
+                                            <br><i>Zafirlukast</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Fasenra" id="Fasenra">
+                                        <label for="Fasenra" class="flex-start" style="width:100%">
+                                            <b>Fasenra</b>
+                                            <br><i>Benralizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Predinsone" id="Predinsone">
+                                        <label for="Predinsone" style="width:100%">
+                                            <b>Predinsone</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="OxezeDiskus" id="OxezeDiskus">
+                                        <label for="OxezeDiskus" style="width:100%">
+                                            <b>Oxeze Diskus</b>
+                                            <br><i>Formoterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SpirivaRespimat" id="SpirivaRespimat">
+                                        <label for="SpirivaRespimat" style="width:100%">
+                                            <b>Spiriva Respimat</b>
+                                            <br><i>Tiotropium bromide</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="DuaklirGenuair" id="DuaklirGenuair">
+                                        <label for="DuaklirGenuair" style="width:100%">
+                                            <b>Duaklir Genuair</b>
+                                            <br><i>Aclidinium/formoterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Singulair" id="Singulair">
+                                        <label for="Singulair" style="width:100%">
+                                            <b>Singulair</b>
+                                            <br><i>Montelukast sodium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Dupixent" id="Dupixent">
+                                        <label for="Dupixent" style="width:100%">
+                                            <b>Dupixent</b>
+                                            <br><i>Dupilumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Theophylline" id="Theophylline">
+                                        <label for="Theophylline" style="width:100%">
+                                            <b>Theophylline</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SereventDiskus" id="SereventDiskus">
+                                        <label for="SereventDiskus" style="width:100%">
+                                            <b>Serevent Diskus</b>
+                                            <br><i>Salmeterol </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="TudorzaGenuair" id="TudorzaGenuair">
+                                        <label for="TudorzaGenuair" style="width:100%">
+                                            <b>Tudorza Genuair</b>
+                                            <br><i>Aclidinium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="InspioltoRespimat" id="InspioltoRespimat">
+                                        <label for="InspioltoRespimat" style="width:100%">
+                                            <b>Inspiolto Respimat</b>
+                                            <br><i>Tiotropium/olodaterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Nucala" id="Nucala">
+                                        <label for="Nucala" style="width:100%">
+                                            <b>Nucala</b>
+                                            <br><i>Mepolizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Dexamethasone" id="Dexamethasone">
+                                        <label for="Dexamethasone" style="width:100%">
+                                            <b>Dexamethasone</b>
+                                        </label>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="OnbrezBreezhaler" id="OnbrezBreezhaler">
+                                        <label for="OnbrezBreezhaler" style="width:100%">
+                                            <b>Onbrez Breezhaler</b>
+                                            <br><i>Indacaterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="SeebriBreezhaler" id="SeebriBreezhaler">
+                                        <label for="SeebriBreezhaler" style="width:100%">
+                                            <b>Seebri Breezhaler</b>
+                                            <br><i>Glycopyrronium </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Anoro" id="Anoro">
+                                        <label for="Anoro" style="width:100%">
+                                            <b>Anoro</b>
+                                            <br><i>Umeclidium/vilanterol</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Xolair" id="Xolair">
+                                        <label for="Xolair" style="width:100%">
+                                            <b>Xolair</b>
+                                            <br><i>Omalizumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="StriverdiRespimat" id="StriverdiRespimat">
+                                        <label for="StriverdiRespimat" style="width:100%">
+                                            <b>Striverdi Respimat</b>
+                                            <br><i>Olodaterol </i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="IncruseEllipta" id="IncruseEllipta">
+                                        <label for="IncruseEllipta" style="width:100%">
+                                            <b>Incruse Ellipta</b>
+                                            <br><i>Umeclidium</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                    <span class="flex-center">
+                                        <input type="checkbox" name="Cinquair" id="Cinquair">
+                                        <label for="Cinquair" style="width:100%">
+                                            <b>Cinquair</b>
+                                            <br><i>Resilzumab</i>
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                     <label style="width:11%; margin-bottom: 15px;">
                         <b>Severe Asthma</b>
@@ -2073,7 +2307,7 @@
                         <label style="width:32%"><b>Daytime symptoms*</b></label>
                         <input type="textbox" placeholder="# of days/week" name="daytimeSymptoms" id="daytimeSymptoms"
                             onchange="calcIsControlled()">
-                        <label>Control=&#60;2</label>
+                        <label>Control &#8804; 2</label>
                     </div>
                     <div>
                         <label><i>(Average number of days/week in the last 4 weeks with dyspnea, cough, wheeze,
@@ -2086,7 +2320,7 @@
                         <label style="width:32%"><b>Nighttime symptoms*</b></label>
                         <input type="textbox" name="nighttimeSymptoms" id="nighttimeSymptoms"
                             onchange="calcIsControlled()" placeholder="# of Nights/Week">
-                        <label>Control=&#60;1</label>
+                        <label>Control &#8804; 1</label>
                     </div>
                     <div>
                         <label><i>(Average number of nights/week in the last 4 weeks with dyspnea, cough, wheeze,
@@ -2165,7 +2399,7 @@
                             <input type="textbox" placeholder="# of doses/week" onchange="calcIsControlled()"
                                 name="needReliever" id="needReliever">
                         </label>
-                        <label>control=&#60;2</label>
+                        <label>control &#8804; 2</label>
                     </div>
                     <div>
                         <label><i>(Average number of days/week in the last 4 weeks)</i></label>
@@ -2181,7 +2415,7 @@
                         </label>
                         &nbsp;&nbsp;&nbsp;
                         <input type="textbox" placeholder="%" style="width:40px">
-                        <label>control=&#60;2-3%</label>
+                        <label>control &#8804; 2-3%</label>
                     </div>
                     <div>
                         <label><i>(Measured Yes/no: if yes, %)</i></label>
