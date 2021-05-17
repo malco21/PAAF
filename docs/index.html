@@ -321,11 +321,15 @@
                     </span>
                     <span id="_ageAsthma">
                         <label style="width:15%"></label>
-
-                        <label style="width:80%">
+                        <label style="width:25%">
                             Age asthma was confirmed
                             <input type="textbox" id="ageConfirmed" name="ageConfirmed" style="width:50px"
                                 oscarDB=e$last#ageConfirmed>
+                        </label>
+                        <label style="width:50%">
+                            Method confirmed by specialist
+                            <input type="checkbox" id="confirmedBySpecialist" v-model="confirmedBySpecialist"
+                                name="confirmedBySpecialist" oscarDB=e$last#confirmedBySpecialist>
                         </label>
                     </span>
                     <span v-show="youngPatient">
@@ -2943,6 +2947,7 @@
                 workStart: document.getElementById("pulled-workStart").value,
                 workWorsen: document.getElementById("pulled-workWorsen").value,
                 completeWrasql: document.getElementById("pulled-completeWrasql").value,
+                confirmedBySpecialist: document.getElementById("confirmedBySpecialist").value,
                 // smoking for pack years calc
                 cigarettesDay: document.getElementById("cigarettesDay").value,
                 cigarettesMonth: document.getElementById("cigarettesMonth").value,
