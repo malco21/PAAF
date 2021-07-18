@@ -232,10 +232,13 @@
     <form method="post" name="PAAF" id="PAAF" class="paaf">
         <div id="app">
             <!-- Hidden fields -->
-            <div style="">
+            <div style="display:none;">
                 <input type="text" id="EMR_PatientID" v-model="EMR_PatientID" oscarDB=patient_id>
                 <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
                 <input type="text" id="EMR_eAPIID" v-model="EMR_eAPIID" name="EMR_eAPIID" oscarDB=e$last#EMR_eAPIID>
+                <input type="text" id="PatientGender" v-model="PatientGender" oscarDB=sex>
+                <input type="text" id="ProviderName" v-model="ProviderName" oscarDB=current_user>
+                <input type="text" id="ProviderIdentifier" v-model="ProviderIdentifier" oscarDB=current_user_id>
             </div>
             <!-- Hidden fields end -->
             <div style="height:75px">
@@ -2939,6 +2942,8 @@
             data: {
                 //hidden fields for seamless link
                 EMR_PatientID: document.getElementById("EMR_PatientID").value,
+                ProviderName: document.getElementById("ProviderName").value,
+                ProviderIdentifier: document.getElementById("ProviderIdentifier").value,
                 PatientGender: document.getElementById("PatientGender").value,
                 EMR_eAPIID: document.getElementById("EMR_eAPIID").value,
 
@@ -3163,26 +3168,28 @@
 
             var asthmaLifePayload = {
                 "EMR_PatientID": app.EMR_PatientID,
-                "PatientDOB": app.dob,
+                "ProviderName": app.ProviderName,
+                "ProviderIdentifier": app.ProviderIdentifier, // "Oscar User No"
+                "PatientDOB": (app.dob ? new Date(app.dob) : null),
                 "PatientGender": (app.PatientGender == "M" || "F" ? app.PatientGender : "U"), //set to "U" if not "M" or "F"
                 //"API_ID": EMR INSTANCE
                 "EMR_eAPIID": app.EMR_eAPIID,
-                "VisitDate": app.encounterDate,
+                "VisitDate": (app.encounterDate ? new Date(app.encounterDate) : null),
                 "Dx_Confirmed_by_PFTs": (app.diagnosis == "confirmed" ? true : false),
                 "Monitored_Spirometry_Last12mos": document.getElementById("Monitored_Spirometry_Last12mos").checked,
                 "isUsing_Inhaled_ICS": document.getElementById("isUsing_Inhaled_ICS").checked,
                 "selfReported_ICS_last12mos": parseInt(document.getElementById("selfReported_ICS_last12mos").value),
                 "selfReported_B2_last4wks": parseInt(document.getElementById("needReliever").value),
-                "SelfReported_b2free_last4wks": document.getElementById("SelfReported_b2free_last4wks").value,
+                "SelfReported_b2free_last4wks": parseInt(document.getElementById("SelfReported_b2free_last4wks").value),
                 "Demonstrated_Correct_Technique": document.getElementById("Demonstrated_Correct_Technique").checked,
                 // "Asthma_SmptomControlAx_Last6mos": Defaulted on sever
                 "Asthma_wellControlled_last4wks": app.asthmaControlledBool,
                 "Symptom_Free_Days_Last4wks": 7 - parseInt(document.getElementById("daytimeSymptoms").value),
-                "Absences_SchoolWork_Last12mos": document.getElementById("Absences_SchoolWork_Last12mos").value,
-                "Patient_MoreThanOne_Exacerbation_Last12mos": (parseInt(document.getElementById("asthmaExacerbationLastYear").value) > 1 ? true : false),
+                "Absences_SchoolWork_Last12mos": parseInt(document.getElementById("Absences_SchoolWork_Last12mos").value),
+                "Patient_MoreThanOne_Exacerbation_Last12mos": (~~parseInt(document.getElementById("asthmaExacerbationLastYear").value) > 1 ? true : false),
                 "Number_EDVisits_Last12mos": parseInt(document.getElementById("Number_EDVisits_Last12mos").value),
                 "Number_UrgentCareVisits_Last12mos": parseInt(document.getElementById("Number_UrgentCareVisits_Last12mos").value),
-                "Number_PrimaryCareVisits_Last12mos": parseInt(document.getElementById("routinePrimaryVisits").value) + parseInt(document.getElementById("urgentPrimaryVisits").value),
+                "Number_PrimaryCareVisits_Last12mos": ~~parseInt(document.getElementById("routinePrimaryVisits").value) + ~~parseInt(document.getElementById("urgentPrimaryVisits").value),
                 // "hasRoutineHCP": Always yes
                 "hasReceivedWrittenActionPlan": (document.getElementById("writtenPlanProvidedYes") || document.getElementId("writtenPlanRevisedYes") || document.getElementById("reviewedNotChangedYes") ? true : false),
                 "ReferredToCAE": document.getElementById("ReferredToCAE").checked,
@@ -3190,13 +3197,6 @@
                 "Smoking_Advised": (app.cessationAsk == "yes" || app.cessationAdvise == "yes" || app.cessationArrange == "yes" ? true : false)
             }
 
-            for (var propName in asthmaLifePayload) {
-                if (isNaN(asthmaLifePayload[propName])) {
-                    delete asthmaLifePayload[propName];
-                }
-            }
-
-            console.log(asthmaLifePayload)
         }
 
 
